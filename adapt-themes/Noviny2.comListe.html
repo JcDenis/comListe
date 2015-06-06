@@ -39,19 +39,23 @@
 			<tpl:CommentsHeader>
 			<dl>
 			</tpl:CommentsHeader>
-			<dt id="c{{tpl:CommentID}}" class="{{tpl:CommentIfMe}} {{tpl:CommentIfOdd}} {{tpl:CommentIfFirst}}">
-				<a href="{{tpl:CommentPostURL}}#c{{tpl:CommentID}}" class="comment-number">{{tpl:CommentOrderNumber}}.</a>
-				{{tpl:lang On}} {{tpl:CommentDate}}, {{tpl:CommentTime}},
-				{{tpl:lang by}} {{tpl:CommentAuthorLink}}
-				<br />({{tpl:lang source:}} <a href="{{tpl:CommentPostURL}}#c{{tpl:CommentID}}">{{tpl:CommentEntryTitle}}</a>)
-			</dt>
-			<dd class="{{tpl:CommentIfMe}} {{tpl:CommentIfOdd}} {{tpl:CommentIfFirst}}">
-				<!-- # --BEHAVIOR-- publicCommentBeforeContent -->
-			  {{tpl:SysBehavior behavior="publicCommentBeforeContent"}}
-			  {{tpl:CommentContent}}
-			  <!-- # --BEHAVIOR-- publicCommentAfterContent -->
-			  {{tpl:SysBehavior behavior="publicCommentAfterContent"}}
-	    </dd>
+      <dt id="c{{tpl:CommentID}}" class="{{tpl:CommentIfMe}} {{tpl:CommentIfOdd}} {{tpl:CommentIfFirst}}">
+        <span class="comment-date"><span class="date-d">{{tpl:CommentDate format="%e"}}</span>
+        <span class="date-m">{{tpl:CommentDate format="%b"}}</span>
+        <span class="date-y">{{tpl:CommentDate format="%Y"}}</span>
+        <span class="date-h"><a href="#c{{tpl:CommentID}}">{{tpl:CommentDate format="%H:%M"}}</a></span>
+        </span>
+      </dt>
+
+      <dd class="{{tpl:CommentIfMe}} {{tpl:CommentIfOdd}} {{tpl:CommentIfFirst}}">
+      <!-- # --BEHAVIOR-- publicCommentBeforeContent -->
+      {{tpl:SysBehavior behavior="publicCommentBeforeContent"}}
+      {{tpl:CommentContent}}
+      <!-- # --BEHAVIOR-- publicCommentAfterContent -->
+      {{tpl:SysBehavior behavior="publicCommentAfterContent"}}
+      <cite>{{tpl:CommentAuthorLink}}</cite>
+			({{tpl:lang source:}} <a href="{{tpl:CommentPostURL}}#c{{tpl:CommentID}}">{{tpl:CommentEntryTitle}}</a>)
+      </dd>
 			<tpl:CommentsFooter>
 	    </dl>
 	    </tpl:CommentsFooter>
