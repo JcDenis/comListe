@@ -1,7 +1,8 @@
-comListe 0.3.1 - 06-06-2015 - Pierre Van Glabeke
+comListe 0.3.1 - 11-06-2015 - Pierre Van Glabeke
 ===========================================================
 * modifs html5
 * mise à jour adapt-themes
+* suppression tpl pour Freshy2 (intégré directement dans v1.9 de Freshy2)
 
 comListe 0.3 - 03-03-2015 - Pierre Van Glabeke
 ===========================================================
