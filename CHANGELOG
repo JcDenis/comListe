@@ -1,3 +1,10 @@
+comListe 0.4 - 19-07-2015 - Pierre Van Glabeke
+===========================================================
+* ajout breadcrumb
+* héritage de thème mustek
+* suppression tpl pour Noviny2 (intégré directement dans v0.9 de Noviny2)
+* dc2.8 requis
+
 comListe 0.3.1 - 11-06-2015 - Pierre Van Glabeke
 ===========================================================
 * modifs html5

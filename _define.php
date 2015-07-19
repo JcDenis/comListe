@@ -16,12 +16,12 @@ $this->registerModule(
         /* Name */         "ComListe",
         /* Description*/   "Display a list of all comments and trackbacks of a blog in a public page",
         /* Author */       "Benoit de Marne, Pierre Van Glabeke",
-        /* Version */      '0.3.1',
+        /* Version */      '0.4',
 	/* Properties */
 	array(
 		'permissions' => 'admin',
 		'type' => 'plugin',
-		'dc_min' => '2.7',
+		'dc_min' => '2.8',
 		'support' => 'http://lab.dotclear.org/wiki/plugin/comListe/fr',
 		'details' => 'http://plugins.dotaddict.org/dc2/details/comListe'
 		)

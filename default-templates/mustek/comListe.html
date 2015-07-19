@@ -1,38 +1,29 @@
-<!DOCTYPE html>
-<html lang="{{tpl:BlogLanguage}}">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="ROBOTS" content="{{tpl:BlogMetaRobots robots="NOINDEX,NOARCHIVE"}}" />
+{{tpl:extends parent="__layout.html"}}
 
+<tpl:Block name="head-title">
   <title>{{tpl:ComListePageTitle encode_html="1"}} - {{tpl:BlogName encode_html="1"}}<tpl:PaginationIf start="0"> - {{tpl:lang page}} {{tpl:PaginationCurrent}}</tpl:PaginationIf></title>
-  <meta name="copyright" content="{{tpl:BlogCopyrightNotice encode_html="1"}}" />
-  <meta name="author" content="{{tpl:BlogEditor encode_html="1"}}" />
-  <meta name="date" content="{{tpl:BlogUpdateDate iso8601="1"}}" />
+</tpl:Block>
 
+<tpl:Block name="meta-robots">
+  <meta name="ROBOTS" content="{{tpl:BlogMetaRobots robots="NOINDEX,NOARCHIVE"}}" />
+</tpl:Block>
+
+<tpl:Block name="dc-entry">
   <meta name="dc.title" lang="{{tpl:BlogLanguage}}" content="{{tpl:ComListePageTitle}} - {{tpl:BlogName encode_html="1"}}<tpl:PaginationIf start="0"> - {{tpl:lang page}} {{tpl:PaginationCurrent}}</tpl:PaginationIf>" />
-  <meta name="dc.language" content="{{tpl:BlogLanguage}}" />
-  <meta name="dc.publisher" content="{{tpl:BlogEditor encode_html="1"}}" />
-  <meta name="dc.rights" content="{{tpl:BlogCopyrightNotice encode_html="1"}}" />
-  <meta name="dc.date" content="{{tpl:BlogUpdateDate iso8601="1"}}" />
-  <meta name="dc.type" content="text" />
-  <meta name="dc.format" content="text/html" />
+  <meta property="dc.language" content="{{tpl:BlogLanguage}}" />
+</tpl:Block>
 
+<tpl:Block name="head-linkrel">
   <link rel="contents" title="{{tpl:lang Archives}}" href="{{tpl:BlogArchiveURL}}" />
+</tpl:Block>
 
-  {{tpl:include src="_head.html"}}
-</head>
+<tpl:Block name="body-tag"><body class="dc-comliste"></tpl:Block>
 
-<body class="dc-comliste">
-<div id="page">
-{{tpl:include src="_top.html"}}
-
-<div id="wrapper">
-
-<div id="main" role="main">
-  <div id="content">
+<tpl:Block name="main-content">
 	<div id="content-info">
   	<h2>{{tpl:ComListePageTitle encode_html="1"}}</h2>
 	</div>
+	
 	<div class="content-inner">
 	  <div id="comments">
 		<tpl:ComListeCommentsEntries>
@@ -66,22 +57,5 @@
 	{{tpl:lang Number of comments per page:}} {{tpl:ComListeNbCommentsPerPage}}<br />
 	{{tpl:lang Number of comments:}} {{tpl:ComListeNbComments}}
 	</p>
-  </div>
-</div>
 
-<div id="sidebar" role="complementary">
-  <div id="blognav">
-    {{tpl:Widgets type="nav"}}
-  </div> <!-- End #blognav -->
-
-  <div id="blogextra">
-    {{tpl:Widgets type="extra"}}
-  </div> <!-- End #blogextra -->
-</div>
-
-</div> <!-- End #wrapper -->
-
-{{tpl:include src="_footer.html"}}
-</div> <!-- End #page -->
-</body>
-</html>
+</tpl:Block>

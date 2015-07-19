@@ -23,3 +23,14 @@ $core->tpl->addValue('ComListeNbCommentsPerPage',array('tplComListe','comListeNb
 $core->tpl->addBlock('ComListeCommentsEntries',array('tplComListe','comListeCommentsEntries'));
 $core->tpl->addValue('ComListePaginationLinks',array('tplComListe','comListePaginationLinks'));
 $core->tpl->addValue('ComListeOpenPostTitle',array('tplComListe','comListeOpenPostTitle'));
+$core->addBehavior('publicBreadcrumb',array('extComListe','publicBreadcrumb'));
+
+class extComListe
+{
+        public static function publicBreadcrumb($context,$separator)
+        {
+                if ($context == 'comListe') {
+                        return __('List of comments');
+                }
+        }
+}
