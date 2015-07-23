@@ -18,3 +18,16 @@ if (!defined('DC_CONTEXT_ADMIN')) { return; }
 $_menu['Blog']->addItem(__('List of comments'),'plugin.php?p=comListe','index.php?pf=comListe/icon.png',
 		preg_match('/plugin.php\?p=comListe(&.*)?$/',$_SERVER['REQUEST_URI']),
 		$core->auth->check('admin',$core->blog->id));
+		
+$core->addBehavior('adminDashboardFavorites','comListeDashboardFavorites');
+
+function comListeDashboardFavorites($core,$favs)
+{
+	$favs->register('comListe', array(
+		'title' => __('List of comments'),
+		'url' => 'plugin.php?p=comListe',
+		'small-icon' => 'index.php?pf=comListe/icon.png',
+		'large-icon' => 'index.php?pf=comListe/icon-big.png',
+		'permissions' => 'usage,contentadmin'
+	));
+}

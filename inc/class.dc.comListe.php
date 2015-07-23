@@ -259,7 +259,6 @@ class tplComListe
 		$nb_sequence = 2*3+1;
 		$quick_distance = 10;
 
-		echo "Pages&nbsp;:&nbsp;";
 		if($nb_pages <= $nb_max_pages) {
 			/* less or equal than 10 pages, simple links */
 			for ($i = 1; $i <= $nb_pages; $i++) { 
@@ -337,6 +336,16 @@ class tplComListe
 		'</a></p>';
 
 		return $w->renderDiv($w->content_only,'comliste '.$w->class,'',$res);
-	}	
+	}
 
+}
+
+class extComListe
+{
+  public static function publicBreadcrumb($context,$separator)
+    {
+      if ($context == 'comListe') {
+      return __('List of comments');
+    }
+  }
 }

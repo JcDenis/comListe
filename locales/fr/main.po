@@ -1,63 +1,90 @@
+# Language: Français
+# Module: comListe - 0.4.1
+# Date: 2015-07-23 16:43:21
+# Translated with translater 2015.03.02
+
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: comListe 0.2\n"
+"Project-Id-Version: comListe 0.4.1\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-12-18T09:16:42+00:00\n"
-"Last-Translator: Pierre Van Glabeke\n"
+"PO-Revision-Date: 2015-07-23T16:43:21+00:00\n"
+"Last-Translator: brol\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: _admin.php:18
-#: _widgets.php:22
-#: index.php:99
-#: index.php:111
-msgid "ComListe"
-msgstr "ComListe"
-
-#: _widgets.php:21
+#: _admin.php:27
 #: _widgets.php:23
-#: inc/class.dc.comListe.php:321
-#: index.php:48
+#: _widgets.php:25
+#: inc/class.dc.comListe.php:335
+#: inc/class.dc.comListe.php:348
+#: index.php:15
+#: index.php:50
 msgid "List of comments"
 msgstr "Liste des commentaires"
 
-#: inc/class.dc.comListe.php:91
-msgid "Number of comments:"
-msgstr "Nombres de commentaires :"
+#: _widgets.php:21
+#: _widgets.php:24
+msgid "ComListe"
+msgstr "ComListe"
 
-#: inc/class.dc.comListe.php:295
-msgid "open post"
-msgstr "ouvrir le billet"
+#: adapt-themes/Notepad-Chaos-1.2.comListe.html:45
+#: default-templates/currywurst/comListe.html:36
+#: default-templates/mustek/comListe.html:37
+msgid "source:"
+msgstr "source :"
 
-#: index.php:68
-msgid "No page title."
-msgstr "Pas de titre de page."
+#: adapt-themes/Notepad-Chaos-1.2.comListe.html:61
+#: default-templates/currywurst/comListe.html:55
+#: default-templates/mustek/comListe.html:53
+msgid "Pages:"
+msgstr "Pages :"
 
-#: index.php:123
-msgid "Plugin activation"
-msgstr "Activation du plugin"
-
-#: index.php:126
-msgid "Enable comListe"
-msgstr "Activer comListe"
-
-#: index.php:128
-msgid "General options"
-msgstr "Options générales"
-
-#: index.php:129
-msgid "Title page"
-msgstr "Titre de la page"
-
-#: index.php:132
+#: adapt-themes/Notepad-Chaos-1.2.comListe.html:65
+#: default-templates/currywurst/comListe.html:60
+#: default-templates/mustek/comListe.html:57
+#: index.php:139
 msgid "Number of comments per page:"
 msgstr "Nombre de commentaires par page :"
 
+#: adapt-themes/Notepad-Chaos-1.2.comListe.html:66
+#: default-templates/currywurst/comListe.html:61
+#: default-templates/mustek/comListe.html:58
+msgid "Total Comments:"
+msgstr "Nombre total de commentaires :"
+
+#: inc/class.dc.comListe.php:306
+msgid "open post"
+msgstr "ouvrir le billet"
+
+#: index.php:70
+msgid "No page title."
+msgstr "Pas de titre de page."
+
+#: index.php:129
+msgid "Plugin activation"
+msgstr "Activation du plugin"
+
+#: index.php:133
+msgid "Enable comListe"
+msgstr "Activer comListe"
+
 #: index.php:135
+msgid "General options"
+msgstr "Options générales"
+
+#: index.php:136
+msgid "Title page"
+msgstr "Titre de la page"
+
+#: index.php:142
 msgid "Comments order"
 msgstr "Sens de tri pour les commentaires"
+
+msgid "Number of comments:"
+msgstr "Nombre de commentaires :"
 
 msgid "Display a list of all comments and trackbacks of a blog in a public page"
 msgstr "Afficher la liste de tous les commentaires et rétroliens d'un blog dans une page publique"
@@ -74,5 +101,3 @@ msgstr "Configuration mise à jour avec succès."
 msgid "Current page"
 msgstr "Page courante"
 
-msgid "source:"
-msgstr "source :"
