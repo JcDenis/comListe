@@ -8,11 +8,6 @@
   <meta name="ROBOTS" content="{{tpl:BlogMetaRobots robots="NOINDEX,NOARCHIVE"}}" />
 </tpl:Block>
 
-<tpl:Block name="dc-entry">
-  <meta name="dc.title" lang="{{tpl:BlogLanguage}}" content="{{tpl:ComListePageTitle}} - {{tpl:BlogName encode_html="1"}}<tpl:PaginationIf start="0"> - {{tpl:lang page}} {{tpl:PaginationCurrent}}</tpl:PaginationIf>" />
-  <meta property="dc.language" content="{{tpl:BlogLanguage}}" />
-</tpl:Block>
-
 <tpl:Block name="head-linkrel">
   <link rel="contents" title="{{tpl:lang Archives}}" href="{{tpl:BlogArchiveURL}}" />
 </tpl:Block>

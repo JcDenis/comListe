@@ -12,6 +12,8 @@
 
 if (!defined('DC_RC_PATH')) { return; }
 
+l10n::set(dirname(__FILE__).'/locales/'.$_lang.'/public');
+
 require_once dirname(__FILE__).'/inc/class.dc.comListe.php';
  
 $core->url->register('comListe','comListe','^comListe(?:/(.+))?$',array('urlcomListe','comListe'));

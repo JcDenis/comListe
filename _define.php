@@ -16,7 +16,7 @@ $this->registerModule(
         /* Name */         "ComListe",
         /* Description*/   "Display a list of all comments and trackbacks of a blog in a public page",
         /* Author */       "Benoit de Marne, Pierre Van Glabeke",
-        /* Version */      '0.4.1',
+        /* Version */      '0.4.2',
 	/* Properties */
 	array(
 		'permissions' => 'admin',
