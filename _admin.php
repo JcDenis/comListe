@@ -37,7 +37,7 @@ dcCore::app()->addBehaviors([
         ]);
     },
     'adminSimpleMenuAddType'    => function (ArrayObject $items) {
-    	$items['comListe'] = new ArrayObject([__('Comments list'), false]);
+    	$items[basename(__DIR__)] = new ArrayObject([__('Comments list'), false]);
     },
     'adminSimpleMenuBeforeEdit' => function ($type, $select, &$item) {
     	if (basename(__DIR__) == $type) {
