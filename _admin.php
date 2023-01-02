@@ -36,4 +36,14 @@ dcCore::app()->addBehaviors([
             'permissions' => dcCore::app()->auth->makePermissions([dcAuth::PERMISSION_ADMIN]),
         ]);
     },
+    'adminSimpleMenuAddType'    => function (ArrayObject $items) {
+    	$items['comListe'] = new ArrayObject([__('Comments list'), false]);
+    },
+    'adminSimpleMenuBeforeEdit' => function ($type, $select, &$item) {
+    	if (basename(__DIR__) == $type) {
+            $item[0] = __('Comments list');
+            $item[1] = __('Comments list');
+            $item[2] = dcCore::app()->admin->blog_url . dcCore::app()->url->getURLFor(basename(__DIR__));
+        }
+    }
 ]);

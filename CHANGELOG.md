@@ -8,6 +8,7 @@ todo
 * use anonymous functions (WIP)
 * use abstract plugin id
 * use short settings id
+* add item to plugin simple menu
 * add install process
 
 comListe 0.4.2 - 11-11-2017 - Pierre Van Glabeke
