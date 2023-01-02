@@ -1,3 +1,15 @@
+todo
+- add dotty template
+- remove currywurst template
+- fix mustek template
+
+0.5-dev - 2023.01.xx
+* update to dotclear 2.24
+* use anonymous functions (WIP)
+* use abstract plugin id
+* use short settings id
+* add install process
+
 comListe 0.4.2 - 11-11-2017 - Pierre Van Glabeke
 * màj tpl
 * localisation
@@ -58,7 +70,7 @@ comListe 0.1.3
 * correction du template comListe.html
 
 comListe 0.1.2
-* suppression du fichier _install.php pour supprimer le bug d'affichage dans la partie admin
+* suppression du fichier _ install.php pour supprimer le bug d'affichage dans la partie admin
 
 comListe 0.1.1
 * ajout de l'initialisation des paramètres par défaut
