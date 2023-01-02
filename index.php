@@ -1,158 +1,96 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-# This file is part of comListe, a plugin for Dotclear.
-# 
-# Copyright (c) 2008-2015 Benoit de Marne
-# benoit.de.marne@gmail.com
-# 
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-# -- END LICENSE BLOCK ------------------------------------
-
-if (!defined('DC_CONTEXT_ADMIN')) { exit; }
-
-$page_title = __('List of comments');
-
-# Settings compatibility test
-if (version_compare(DC_VERSION,'2.2-alpha','>=')) {
-	$core->blog->settings->addNamespace('comListe');
-	$blog_settings =& $core->blog->settings->comListe;
-	$system_settings = $core->blog->settings->system;
-} else {
-	$core->blog->settings->setNamespace('comListe');
-	$blog_settings =& $core->blog->settings;
-	$system_settings =& $core->blog->settings;
+/**
+ * @brief comListe, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Benoit de Marne, Pierre Van Glabeke and contributors
+ *
+ * @copyright Jean-Christian Denis
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return null;
 }
 
-// initilisation des variables
-$action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : null;
+dcPage::check(dcCore::app()->auth->makePermissions([
+    dcAuth::PERMISSION_ADMIN,
+]));
 
-// Setting default parameters if missing configuration
-if (is_null($blog_settings->comliste_enable)) {
-	try {
-		$blog_settings->put('comliste_enable',false,'boolean','Enable comListe');
-		$core->blog->triggerBlog();
-		http::redirect(http::getSelfURI());
-	}
-	catch (Exception $e) {
-		$core->error->add($e->getMessage());
-	}
+$s           = dcCore::app()->blog->settings->get(basename(__dir__));
+$action      = $_REQUEST['action'] ?? null;
+$order_combo = [
+    __('Ascending')  => 'asc',
+    __('Descending') => 'desc',
+];
+
+if ($action == 'saveconfig') {
+    try {
+        if (empty($_POST['comliste_page_title'])) {
+            throw new Exception(__('No page title.'));
+        }
+
+        $s->put('enable', !empty($_POST['comliste_enable']));
+        $s->put('comliste_page_title', $_POST['comliste_page_title']);
+        $s->put('comliste_nb_comments_per_page', $_POST['comliste_nb_comments_per_page'] ?? 10);
+        $s->put('comliste_comments_order', $_POST['comliste_comments_order'] == 'asc' ? 'asc' : 'desc');
+
+        dcCore::app()->blog->triggerBlog();
+
+        dcAdminNotices::addSuccessNotice(
+            __('Configuration successfully updated.')
+        );
+
+        dcCore::app()->adminurl->redirect(
+            'admin.plugin.' . basename(__DIR__)
+        );
+    } catch (Exception $e) {
+        dcCore::app()->error->add($e->getMessage());
+    }
 }
 
-// Getting current parameters
-$comliste_enable = (boolean)$blog_settings->comliste_enable;
-$comliste_page_title = $blog_settings->comliste_page_title;
-$comliste_nb_comments_per_page = $blog_settings->comliste_nb_comments_per_page;
-$comliste_comments_order = $blog_settings->comliste_comments_order;
+echo '
+<html><head><title>' . __('Comments list') . '</title></head><body>' .
+dcPage::breadcrumb([
+    html::escapeHTML(dcCore::app()->blog->name) => '',
+    __('Comments list')                         => '',
+]) .
+dcPage::notices() .
 
-if ($comliste_page_title === null) {
-	$comliste_page_title = __('List of comments');
-}
-if ($comliste_nb_comments_per_page === null) {
-	$comliste_nb_comments_per_page = 10;
-}
-if ($comliste_comments_order === null) {
-	$comliste_comments_order = 'desc';
-}
+'<form method="post" action="' . dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)) . '">' .
+'<div class="fieldset"><h4>' . __('Plugin activation') . '</h4>' .
 
-// Saving new configuration
-if ($action == 'saveconfig')
-{
-	try {
-		
-		// Enable plugin
-		$comliste_enable = (empty($_POST['comliste_enable']))?false:true;
-		
-		// Title page
-		$comliste_page_title = $_POST['comliste_page_title'];
-		if (empty($_POST['comliste_page_title'])) {
-		  throw new Exception(__('No page title.'));
-		}
+'<p class="field"><label for="comliste_enable" class="classic">' .
+form::checkbox('comliste_enable', 1, (bool) $s->get('enable')) .
+__('Enable comListe') . '</label></p>' .
 
-		//  Number of comments per page
-		$comliste_nb_comments_per_page = !empty($_POST['comliste_nb_comments_per_page'])?$_POST['comliste_nb_comments_per_page']:$comliste_nb_comments_per_page;
-		
-		// Order
-		$comliste_comments_order = !empty($_POST['comliste_comments_order'])?$_POST['comliste_comments_order']:$comliste_comments_order;
-		
-		// Insert settings values
-		$blog_settings->put('comliste_enable',$comliste_enable,'boolean','Enable comListe');
-		$blog_settings->put('comliste_page_title',$comliste_page_title,'string','Title page');
-		$blog_settings->put('comliste_nb_comments_per_page',$comliste_nb_comments_per_page,'integer','Number of comments per page');
-		$blog_settings->put('comliste_comments_order',$comliste_comments_order,'string','Comments order');
-		
-		$core->blog->triggerBlog();
+'</div>' .
+'<div class="fieldset"><h4>' . __('General options') . '</h4>' .
 
-		http::redirect($p_url.'&saveconfig=1');
-		
-	} catch (Exception $e) {
-		$core->error->add($e->getMessage());
-	}	
-}
+'<p><label for="comliste_page_title">' . __('Public page title:') . ' </label>' .
+form::field('comliste_page_title', 30, 255, (string) $s->get('page_title')) .
+'</label></p>' .
 
-?>
+'<p><label for="comliste_nb_comments_per_page">' .
+__('Number of comments per page:') . '</label>' .
+form::number('comliste_nb_comments_per_page', ['min' => 0, 'max' => 99, 'default' => (int) $s->get('nb_comments_per_page')]) .
+'</p>' .
 
-<!-- Creating HTML page -->
-<html>
+'<p><label for="comliste_comments_order">' . __('Comments order:') . '</label>' .
+form::combo('comliste_comments_order', $order_combo, $s->get('comments_order') == 'asc' ? 'asc' : 'desc') .
+'</p>' .
 
-<!-- header -->
-<head>
-  <title><?php echo $page_title; ?></title>
-</head>
+'</div>
 
-<!-- body -->
-<body>
+<p class="clear">' .
+form::hidden(['action'], 'saveconfig') .
+dcCore::app()->formNonce() . '
+<input id="new-action" type="submit" name="save" value="' . __('Save') . '" />
+</p>
 
-<?php
-	echo dcPage::breadcrumb(
-		array(
-			html::escapeHTML($core->blog->name) => '',
-			'<span class="page-title">'.$page_title.'</span>' => ''
-		));
+</form>';
 
-if (!empty($_GET['saveconfig'])) {
-  dcPage::success(__('Settings have been successfully updated.'));
-}
-?>
+dcPage::helpBlock('comListe');
 
-<?php
-
-$order_combo = array(__('Ascending') => 'asc',
-__('Descending') => 'desc' );
-	
-	// comListe plugin configuration
-	if ($core->auth->check('admin',$core->blog->id))
-	{
-		echo
-		'<form method="post" action="plugin.php">'.
-		'<div class="fieldset"><h4>'. __('Plugin activation').'</h4>'.
-		'<p class="field">'.
-		'<label class="classic" for="comliste_enable">'.
-		form::checkbox('comliste_enable', 1, $comliste_enable).
-		__('Enable comListe').'</label></p>'.
-		'</div>'.
-		'<div class="fieldset"><h4>'. __('General options').'</h4>'.
-		'<p><label class="classic">'. __('Title page').' : '.
-		form::field('comliste_page_title', 30,256, $comliste_page_title).
-		'</label></p>'.
-		'<p><label class=" classic">'. __('Number of comments per page:').' '.
-		form::field('comliste_nb_comments_per_page', 4, 4, $comliste_nb_comments_per_page).
-		'</label></p>'.
-		'<p><label class=" classic">'. __('Comments order').' : '.
-		form::combo('comliste_comments_order', $order_combo, $comliste_comments_order).
-		'</label></p>'.
-		'</div>'.
-		'<p><input type="submit" value="'.__('Save').'" onclick="affinfo(\''.__('Save').'\')" /> '.
-		$core->formNonce().
-		form::hidden(array('action'),'saveconfig').
-		form::hidden(array('p'),'comListe').'</p>'.
-		'</form>';
-	}
-
-?>
-
-<?php dcPage::helpBlock('comListe');?>
-
-</body>
-</html>
+echo '</body></html>';

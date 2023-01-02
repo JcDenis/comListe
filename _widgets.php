@@ -1,37 +1,63 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-# This file is part of comListe, a plugin for Dotclear.
-# 
-# Copyright (c) 2008-2015 Benoit de Marne
-# benoit.de.marne@gmail.com
-# 
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-# -- END LICENSE BLOCK ------------------------------------
+/**
+ * @brief comListe, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Benoit de Marne, Pierre Van Glabeke and contributors
+ *
+ * @copyright Jean-Christian Denis
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+if (!defined('DC_RC_PATH')) {
+    return null;
+}
 
-if (!defined('DC_RC_PATH')) { return; }
+dcCore::app()->addBehavior('initWidgets', ['comListeWidget','initWidget']);
 
-$core->addBehavior('initWidgets',array('comListeWidgets','initWidgets'));
-
-class comListeWidgets
+class comListeWidget
 {
-	public static function initWidgets($w)
-	{
-		$w->create('comListe',__('ComListe'),array('tplComListe','comListeWidget'),
-			null,
-			__('List of comments'));
-		$w->comListe->setting('title',__('Title:'),__('ComListe'));
-		$w->comListe->setting('link_title',__('Link title:'),__('List of comments'));
-		$w->comListe->setting('homeonly',__('Display on:'),0,'combo',
-			array(
-				__('All pages') => 0,
-				__('Home page only') => 1,
-				__('Except on home page') => 2
-				)
-		);
-    $w->comListe->setting('content_only',__('Content only'),0,'check');
-    $w->comListe->setting('class',__('CSS class:'),'');
-		$w->comListe->setting('offline',__('Offline'),0,'check');
-	}
+    public static function initWidget($w)
+    {
+        $w->create(
+            'comListe',
+            __('Comments list'),
+            ['comListeWidget','publicWidget'],
+            null,
+            __('Comments list')
+        )
+        ->addTitle(__('Comments list'))
+        ->setting(
+            'link_title',
+            __('Link title:'),
+            __('Comments list')
+        )
+        ->addHomeOnly()
+        ->addContentOnly()
+        ->addClass()
+        ->addOffline();
+    }
+
+    public static function publicWidget($w)
+    {
+        if ($w->offline
+         || !$w->checkHomeOnly(dcCore::app()->url->type)
+         || !dcCore::app()->blog->settings->get(basename(__DIR__))->get('enable')
+        ) {
+            return null;
+        }
+
+        return $w->renderDiv(
+            $w->content_only,
+            'comliste ' . $w->class,
+            '',
+            ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '') .
+            sprintf(
+                '<p><a href="%s">%s</a></p>',
+                dcCore::app()->blog->url . dcCore::app()->url->getBase('comListe'),
+                $w->link_title ? html::escapeHTML($w->link_title) : __('Comments list')
+            )
+        );
+    }
 }

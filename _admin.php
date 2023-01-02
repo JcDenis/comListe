@@ -1,33 +1,39 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-# This file is part of comListe, a plugin for Dotclear.
-# 
-# Copyright (c) 2008-2015 Benoit de Marne
-# benoit.de.marne@gmail.com
-# 
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-# -- END LICENSE BLOCK ------------------------------------
-
-#--- icon.png issue du pack mini_icons_2 offertes par Brandspankingnew
-#--- http://www.brandspankingnew.net
-
-if (!defined('DC_CONTEXT_ADMIN')) { return; }
-
-$_menu['Blog']->addItem(__('List of comments'),'plugin.php?p=comListe','index.php?pf=comListe/icon.png',
-		preg_match('/plugin.php\?p=comListe(&.*)?$/',$_SERVER['REQUEST_URI']),
-		$core->auth->check('admin',$core->blog->id));
-		
-$core->addBehavior('adminDashboardFavorites','comListeDashboardFavorites');
-
-function comListeDashboardFavorites($core,$favs)
-{
-	$favs->register('comListe', array(
-		'title' => __('List of comments'),
-		'url' => 'plugin.php?p=comListe',
-		'small-icon' => 'index.php?pf=comListe/icon.png',
-		'large-icon' => 'index.php?pf=comListe/icon-big.png',
-		'permissions' => 'usage,contentadmin'
-	));
+/**
+ * @brief comListe, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Benoit de Marne, Pierre Van Glabeke and contributors
+ *
+ * @copyright Jean-Christian Denis
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return null;
 }
+
+require __DIR__ . '/_widgets.php';
+
+// Admin menu
+dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
+    __('Comments list'),
+    dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+    urldecode(dcPage::getPF(basename(__DIR__) . '/icon.png')),
+    preg_match('/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__))) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
+    dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([dcAuth::PERMISSION_ADMIN]), dcCore::app()->blog->id)
+);
+
+dcCore::app()->addBehaviors([
+    // Dashboard favorites
+    'adminDashboardFavoritesV2' => function (dcFavorites $favs) {
+        $favs->register(basename(__DIR__), [
+            'title'       => __('Comments list'),
+            'url'         => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+            'small-icon'  => urldecode(dcPage::getPF(basename(__DIR__) . '/icon.png')),
+            'large-icon'  => urldecode(dcPage::getPF(basename(__DIR__) . '/icon-big.png')),
+            'permissions' => dcCore::app()->auth->makePermissions([dcAuth::PERMISSION_ADMIN]),
+        ]);
+    },
+]);
