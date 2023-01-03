@@ -1,7 +1,5 @@
 todo
-- add dotty template
-- remove currywurst template
-- fix mustek template
+- fix template pagination
 
 0.5-dev - 2023.01.xx
 * update to dotclear 2.24
@@ -10,6 +8,8 @@ todo
 * use short settings id
 * add item to plugin simple menu
 * add install process
+* add template dotty
+* remove template currywurst
 
 comListe 0.4.2 - 11-11-2017 - Pierre Van Glabeke
 * màj tpl

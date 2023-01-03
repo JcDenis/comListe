@@ -1,0 +1,58 @@
+{{tpl:extends parent="__layout.html"}}
+
+<tpl:Block name="head-title">
+  <title>{{tpl:ComListePageTitle encode_html="1"}} - {{tpl:BlogName encode_html="1"}}<tpl:PaginationIf start="0"> - {{tpl:lang page}} {{tpl:PaginationCurrent}}</tpl:PaginationIf></title>
+</tpl:Block>
+
+<tpl:Block name="meta-robots">
+  <meta name="ROBOTS" content="{{tpl:BlogMetaRobots robots="NOINDEX,NOARCHIVE"}}" />
+</tpl:Block>
+
+<tpl:Block name="head-linkrel">
+  <link rel="contents" title="{{tpl:lang Archives}}" href="{{tpl:BlogArchiveURL}}" />
+</tpl:Block>
+
+<tpl:Block name="body-tag"><body class="dc-comliste"></tpl:Block>
+
+<tpl:Block name="main-content">
+	<div id="content-info">
+  	<h2>{{tpl:ComListePageTitle encode_html="1"}}</h2>
+	</div>
+	
+	<div class="content-inner">
+	  <div id="comments">
+		<tpl:ComListeCommentsEntries>
+			<tpl:CommentsHeader>
+              <div class="feedback__comments" id="comments">
+                <ul class="comments-list">
+			</tpl:CommentsHeader>
+                <li id="c{{tpl:CommentID}}" class="comment {{tpl:CommentIfMe}} {{tpl:CommentIfOdd}} {{tpl:CommentIfFirst}}">
+              <p class="comment-info">{{tpl:lang Source:}} <a href="{{tpl:CommentPostURL}}#c{{tpl:CommentID}}">{{tpl:CommentEntryTitle}}</a> - <a href="#c{{tpl:CommentID}}" class="comment-number">{{tpl:CommentOrderNumber}}</a> {{tpl:lang From}} {{tpl:CommentAuthorLink}} - <time datetime="{{tpl:CommentDate iso8601="1"}}">{{tpl:CommentDate format="%d"}}/{{tpl:CommentDate format="%m"}}/{{tpl:CommentDate format="%Y"}}, {{tpl:CommentTime}}</time>
+              </p>
+            <tpl:Block name="_entry-feedback-comments-comment-content">
+              <div class="comment-content">
+                <!-- # --BEHAVIOR-- publicCommentBeforeContent -->
+                {{tpl:SysBehavior behavior="publicCommentBeforeContent"}}
+                {{tpl:CommentContent}}
+                <!-- # --BEHAVIOR-- publicCommentAfterContent -->
+                {{tpl:SysBehavior behavior="publicCommentAfterContent"}}
+              </div>
+            </tpl:Block>
+            </li>
+			<tpl:CommentsFooter>
+              </ul>
+              </div>
+	    </tpl:CommentsFooter>
+		</tpl:ComListeCommentsEntries>
+	  </div>
+	</div>
+	<p class="pagination">
+	{{tpl:lang Pages:}} {{tpl:ComListePaginationLinks}}
+	</p>
+
+	<p class="post-info">
+	{{tpl:lang Number of comments per page:}} {{tpl:ComListeNbCommentsPerPage}}<br />
+	{{tpl:lang Total Comments:}} {{tpl:ComListeNbComments}}
+	</p>
+
+</tpl:Block>
