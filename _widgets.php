@@ -25,12 +25,12 @@ class comListeWidget
             __('Comments list'),
             ['comListeWidget','publicWidget'],
             null,
-            __('Comments list')
+            __('Link to comments list public page')
         )
         ->addTitle(__('Comments list'))
         ->setting(
             'link_title',
-            __('Link title:'),
+            __('Link title: (leave empty to use page title'),
             __('Comments list')
         )
         ->addHomeOnly()
@@ -56,7 +56,7 @@ class comListeWidget
             sprintf(
                 '<p><a href="%s">%s</a></p>',
                 dcCore::app()->blog->url . dcCore::app()->url->getBase('comListe'),
-                $w->link_title ? html::escapeHTML($w->link_title) : __('Comments list')
+                $w->link_title ? html::escapeHTML($w->link_title) : (dcCore::app()->blog->settings->get(basename(__DIR__))->get('page_title') ?? __('Comments list'))
             )
         );
     }

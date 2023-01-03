@@ -37,13 +37,13 @@ dcCore::app()->addBehaviors([
         ]);
     },
     'adminSimpleMenuAddType'    => function (ArrayObject $items) {
-    	$items[basename(__DIR__)] = new ArrayObject([__('Comments list'), false]);
+        $items[basename(__DIR__)] = new ArrayObject([__('Comments list'), false]);
     },
     'adminSimpleMenuBeforeEdit' => function ($type, $select, &$item) {
-    	if (basename(__DIR__) == $type) {
+        if (basename(__DIR__) == $type) {
             $item[0] = __('Comments list');
-            $item[1] = __('Comments list');
+            $item[1] = dcCore::app()->blog->settings->get(basename(__DIR__))->get('page_title') ?? __('Comments list');
             $item[2] = dcCore::app()->admin->blog_url . dcCore::app()->url->getURLFor(basename(__DIR__));
         }
-    }
+    },
 ]);
