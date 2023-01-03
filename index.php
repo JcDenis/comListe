@@ -32,9 +32,9 @@ if ($action == 'saveconfig') {
         }
 
         $s->put('enable', !empty($_POST['comliste_enable']));
-        $s->put('comliste_page_title', $_POST['comliste_page_title']);
-        $s->put('comliste_nb_comments_per_page', $_POST['comliste_nb_comments_per_page'] ?? 10);
-        $s->put('comliste_comments_order', $_POST['comliste_comments_order'] == 'asc' ? 'asc' : 'desc');
+        $s->put('page_title', $_POST['comliste_page_title']);
+        $s->put('nb_comments_per_page', $_POST['comliste_nb_comments_per_page'] ?? 10);
+        $s->put('comments_order', $_POST['comliste_comments_order'] == 'asc' ? 'asc' : 'desc');
 
         dcCore::app()->blog->triggerBlog();
 
