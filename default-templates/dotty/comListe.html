@@ -17,6 +17,12 @@
 <tpl:Block name="main-content">
 	<div id="content-info">
   	<h2>{{tpl:ComListePageTitle encode_html="1"}}</h2>
+        <tpl:Block name="main-content-header-desc">
+          <div class="content-info__cat-desc">
+	<p>{{tpl:lang Number of comments per page:}} {{tpl:ComListeNbCommentsPerPage}}<br />
+	{{tpl:lang Total Comments:}} {{tpl:ComListeNbComments}}</p>
+          </div>
+        </tpl:Block>
 	</div>
 	
 	<div class="content-inner">
@@ -42,17 +48,30 @@
 			<tpl:CommentsFooter>
               </ul>
               </div>
+<tpl:Block name="_pagination-before"></tpl:Block>
+<tpl:Block name="_pagination-content">
+  <tpl:ComListePagination>
+    <nav class="pagination" aria-label="{{tpl:lang Pagination}}" role="navigation">
+      <tpl:Block name="_pagination-content-prev">
+        <tpl:ComListePaginationIf end="0">
+          <a href="{{tpl:ComListePaginationURL offset="+1"}}" class="prev"><span aria-hidden="true">&#171; </span>{{tpl:lang previous entries}}</a> -
+        </tpl:ComListePaginationIf>
+      </tpl:Block>
+      <tpl:Block name="_pagination-content-current">
+        <span class="visually-hidden">{{tpl:lang Active page}}</span>{{tpl:lang page}} {{tpl:ComListePaginationCurrent}} {{tpl:lang of}} {{tpl:ComListePaginationCounter}}
+      </tpl:Block>
+      <tpl:Block name="_pagination-content-next">
+        <tpl:ComListePaginationIf start="0"> - <a href="{{tpl:ComListePaginationURL offset="-1"}}" class="next">
+          {{tpl:lang next entries}}<span aria-hidden="true"> &#187;</span></a>
+        </tpl:ComListePaginationIf>
+      </tpl:Block>
+    </nav>
+  </tpl:ComListePagination>
+</tpl:Block>
+<tpl:Block name="_pagination-after"></tpl:Block>
 	    </tpl:CommentsFooter>
 		</tpl:ComListeCommentsEntries>
 	  </div>
 	</div>
-	<p class="pagination">
-	{{tpl:lang Pages:}} {{tpl:ComListePaginationLinks}}
-	</p>
-
-	<p class="post-info">
-	{{tpl:lang Number of comments per page:}} {{tpl:ComListeNbCommentsPerPage}}<br />
-	{{tpl:lang Total Comments:}} {{tpl:ComListeNbComments}}
-	</p>
 
 </tpl:Block>

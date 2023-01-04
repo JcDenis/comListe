@@ -28,6 +28,12 @@ dcCore::app()->tpl->addBlock('ComListeCommentsEntries', ['tplComListe','comListe
 dcCore::app()->tpl->addValue('ComListePaginationLinks', ['tplComListe','comListePaginationLinks']);
 dcCore::app()->tpl->addValue('ComListeOpenPostTitle', ['tplComListe','comListeOpenPostTitle']);
 
+dcCore::app()->tpl->addBlock('ComListePagination', ['tplComListe','comListePagination']);
+dcCore::app()->tpl->addValue('ComListePaginationCounter', ['tplComListe','comListePaginationCounter']);
+dcCore::app()->tpl->addValue('ComListePaginationCurrent', ['tplComListe','comListePaginationCurrent']);
+dcCore::app()->tpl->addBlock('ComListePaginationIf', ['tplComListe','comListePaginationIf']);
+dcCore::app()->tpl->addValue('ComListePaginationURL', ['tplComListe','comListePaginationURL']);
+
 dcCore::app()->addBehaviors([
     'publicBreadcrumb' => function ($context, $separator) {
         if ($context == 'comListe') {
@@ -44,17 +50,13 @@ class tplComListe
     /* ComListeURL --------------------------------------- */
     public static function comListeURL($attr)
     {
-        $f = dcCore::app()->tpl->getFilters($attr);
-
-        return '<?php echo ' . sprintf($f, 'dcCore::app()->blog->url.dcCore::app()->url->getBase("comListe")') . '; ?>';
+        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->blog->url.dcCore::app()->url->getBase("comListe")') . '; ?>';
     }
 
     /* ComListePageTitle --------------------------------------- */
     public static function comListePageTitle($attr)
     {
-        $f = dcCore::app()->tpl->getFilters($attr);
-
-        return '<?php echo ' . sprintf($f, 'dcCore::app()->blog->settings->get("' . basename(__DIR__) . '")->get("page_title")') . '; ?>';
+        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->blog->settings->get("' . basename(__DIR__) . '")->get("page_title")') . '; ?>';
     }
 
     /* ComListeNbCommentsPerPage --------------------------------------- */
@@ -125,6 +127,7 @@ class tplComListe
 
         $res = "<?php\n";
         $res .= $p;
+        $res .= 'dcCore::app()->ctx->comments_params = $params; ';
         $res .= 'dcCore::app()->ctx->comments = dcCore::app()->blog->getComments($params); unset($params);' . "\n";
         $res .= "if (dcCore::app()->ctx->posts !== null) { dcCore::app()->blog->withoutPassword(true);}\n";
 
@@ -231,5 +234,82 @@ class tplComListe
     public static function comListeOpenPostTitle($attr)
     {
         return __('open post');
+    }
+
+    public static function comListePagination(ArrayObject $attr, string $content): string
+    {
+        $params = "<?php\n" .
+            '$params = dcCore::app()->ctx->comments_params;'. "\n" .
+            dcCore::app()->callBehavior(
+                'templatePrepareParams',
+                [
+                    'tag'    => 'Pagination',
+                    'method' => 'comListe::getComments',
+                ],
+                $attr,
+                $content
+            ) .
+            'dcCore::app()->ctx->pagination = dcCore::app()->blog->getComments($params,true); unset($params);' . "\n" .
+            "?>\n";
+
+        if (isset($attr['no_context']) && $attr['no_context']) {
+            return $params . $content;
+        }
+
+        return
+            "<?php\n" .
+            '$bakcup_old_nbpp = dcCore::app()->ctx->nb_entry_per_page; ' . "\n" .
+            'dcCore::app()->ctx->nb_entry_per_page = abs((integer) dcCore::app()->blog->settings->get("' . basename(__DIR__) . '")->get("nb_comments_per_page"));' . "\n" .
+            "?>\n" .
+            $params .
+            '<?php if (dcCore::app()->ctx->pagination->f(0) > dcCore::app()->ctx->comments->count()) : ?>' .
+            $content .
+            "<?php endif;\n" .
+            'dcCore::app()->ctx->nb_entry_per_page = $bakcup_old_nbpp; ' . "\n" .
+            '?>';
+
+    }
+
+    public static function comListePaginationCounter(ArrayObject $attr): string
+    {
+        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'context::PaginationNbPages()') . '; ?>';
+    }
+
+    public static function comListePaginationCurrent(ArrayObject $attr): string
+    {
+        $offset = isset($attr['offset']) ? (int) $attr['offset'] : 0;
+
+        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'context::PaginationPosition(' . $offset . ')') . '; ?>';
+    }
+
+    public static function comListePaginationIf(ArrayObject $attr, string $content): string
+    {
+        $if = [];
+
+        if (isset($attr['start'])) {
+            $sign = (bool) $attr['start'] ? '' : '!';
+            $if[] = $sign . 'context::PaginationStart()';
+        }
+
+        if (isset($attr['end'])) {
+            $sign = (bool) $attr['end'] ? '' : '!';
+            $if[] = $sign . 'context::PaginationEnd()';
+        }
+
+        if (count($if)) {
+            return '<?php if(' . implode(' && ', $if) . ') : ?>' . $content . '<?php endif; ?>';
+        }
+
+        return $content;
+    }
+
+    public static function comListePaginationURL(ArrayObject $attr): string
+    {
+        $offset = 0;
+        if (isset($attr['offset'])) {
+            $offset = (int) $attr['offset'];
+        }
+
+        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'context::PaginationURL(' . $offset . ')') . '; ?>';
     }
 }
