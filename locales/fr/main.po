@@ -3,7 +3,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: comListe 0.5-dev\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-01T23:49:46+00:00\n"
+"PO-Revision-Date: 2023-01-04T23:35:06+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr "Liste de commentaires"
 msgid "open post"
 msgstr "ouvrir le billet"
 
-msgid "source:"
-msgstr "source :"
+msgid "Link to comments list public page"
+msgstr "Lien vers la page public de la liste des commentaires"
 
 msgid "Pages:"
 msgstr "Pages :"
@@ -27,6 +27,9 @@ msgstr "Nombre de commentaires par page :"
 
 msgid "Total Comments:"
 msgstr "Nombre total de commentaires :"
+
+msgid "Source:"
+msgstr "Source :"
 
 msgid "No page title."
 msgstr "Pas de titre de page."
@@ -43,18 +46,6 @@ msgstr "Titre de la page public :"
 msgid "Comments order:"
 msgstr "Ordre des commentaires :"
 
-msgid "Comments order"
-msgstr "Ordre des commentaires"
-
-msgid "Number of comments:"
-msgstr "Nombre de commentaires :"
-
 msgid "Display a list of all comments and trackbacks of a blog in a public page"
 msgstr "Afficher la liste de tous les commentaires et rétroliens d'un blog dans une page publique"
-
-msgid "Message:"
-msgstr "Message :"
-
-msgid "Current page"
-msgstr "Page courante"
 
