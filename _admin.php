@@ -43,7 +43,7 @@ dcCore::app()->addBehaviors([
         if (basename(__DIR__) == $type) {
             $item[0] = __('Comments list');
             $item[1] = dcCore::app()->blog->settings->get(basename(__DIR__))->get('page_title') ?? __('Comments list');
-            $item[2] = dcCore::app()->admin->blog_url . dcCore::app()->url->getURLFor(basename(__DIR__));
+            $item[2] = dcCore::app()->admin->__get('blog_url') . dcCore::app()->url->getURLFor(basename(__DIR__));
         }
     },
 ]);

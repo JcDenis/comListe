@@ -239,7 +239,7 @@ class tplComListe
     public static function comListePagination(ArrayObject $attr, string $content): string
     {
         $params = "<?php\n" .
-            '$params = dcCore::app()->ctx->comments_params;'. "\n" .
+            '$params = dcCore::app()->ctx->comments_params;' . "\n" .
             dcCore::app()->callBehavior(
                 'templatePrepareParams',
                 [
@@ -267,7 +267,6 @@ class tplComListe
             "<?php endif;\n" .
             'dcCore::app()->ctx->nb_entry_per_page = $bakcup_old_nbpp; ' . "\n" .
             '?>';
-
     }
 
     public static function comListePaginationCounter(ArrayObject $attr): string
