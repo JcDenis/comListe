@@ -14,7 +14,7 @@ if (!defined('DC_RC_PATH')) {
     return null;
 }
 
-dcCore::app()->addBehavior('initWidgets', ['comListeWidget','initWidget']);
+dcCore::app()->addBehavior('initWidgets', [comListeWidget::class,'initWidget']);
 
 class comListeWidget
 {

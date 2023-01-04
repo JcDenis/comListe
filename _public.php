@@ -20,19 +20,19 @@ if (!dcCore::app()->blog->settings->get(basename(__DIR__))->get('enable')) {
 
 require __DIR__ . '/_widgets.php';
 
-dcCore::app()->tpl->addValue('ComListeURL', ['tplComListe','comListeURL']);
-dcCore::app()->tpl->addValue('ComListePageTitle', ['tplComListe','comListePageTitle']);
-dcCore::app()->tpl->addValue('ComListeNbComments', ['tplComListe','comListeNbComments']);
-dcCore::app()->tpl->addValue('ComListeNbCommentsPerPage', ['tplComListe','comListeNbCommentsPerPage']);
-dcCore::app()->tpl->addBlock('ComListeCommentsEntries', ['tplComListe','comListeCommentsEntries']);
-dcCore::app()->tpl->addValue('ComListePaginationLinks', ['tplComListe','comListePaginationLinks']);
-dcCore::app()->tpl->addValue('ComListeOpenPostTitle', ['tplComListe','comListeOpenPostTitle']);
+dcCore::app()->tpl->addValue('ComListeURL', [tplComListe::class,'comListeURL']);
+dcCore::app()->tpl->addValue('ComListePageTitle', [tplComListe::class,'comListePageTitle']);
+dcCore::app()->tpl->addValue('ComListeNbComments', [tplComListe::class,'comListeNbComments']);
+dcCore::app()->tpl->addValue('ComListeNbCommentsPerPage', [tplComListe::class,'comListeNbCommentsPerPage']);
+dcCore::app()->tpl->addBlock('ComListeCommentsEntries', [tplComListe::class,'comListeCommentsEntries']);
+dcCore::app()->tpl->addValue('ComListePaginationLinks', [tplComListe::class,'comListePaginationLinks']);
+dcCore::app()->tpl->addValue('ComListeOpenPostTitle', [tplComListe::class,'comListeOpenPostTitle']);
 
-dcCore::app()->tpl->addBlock('ComListePagination', ['tplComListe','comListePagination']);
-dcCore::app()->tpl->addValue('ComListePaginationCounter', ['tplComListe','comListePaginationCounter']);
-dcCore::app()->tpl->addValue('ComListePaginationCurrent', ['tplComListe','comListePaginationCurrent']);
-dcCore::app()->tpl->addBlock('ComListePaginationIf', ['tplComListe','comListePaginationIf']);
-dcCore::app()->tpl->addValue('ComListePaginationURL', ['tplComListe','comListePaginationURL']);
+dcCore::app()->tpl->addBlock('ComListePagination', [tplComListe::class,'comListePagination']);
+dcCore::app()->tpl->addValue('ComListePaginationCounter', [tplComListe::class,'comListePaginationCounter']);
+dcCore::app()->tpl->addValue('ComListePaginationCurrent', [tplComListe::class,'comListePaginationCurrent']);
+dcCore::app()->tpl->addBlock('ComListePaginationIf', [tplComListe::class,'comListePaginationIf']);
+dcCore::app()->tpl->addValue('ComListePaginationURL', [tplComListe::class,'comListePaginationURL']);
 
 dcCore::app()->addBehaviors([
     'publicBreadcrumb' => function ($context, $separator) {

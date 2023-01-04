@@ -18,7 +18,7 @@ dcCore::app()->url->register(
     'comListe',
     'comListe',
     '^comListe(?:/(.+))?$',
-    ['urlcomListe','comListe']
+    [urlcomListe::class,'comListe']
 );
 
 class urlcomListe extends dcUrlHandlers
