@@ -27,6 +27,7 @@ dcCore::app()->tpl->addValue('ComListeNbCommentsPerPage', [tplComListe::class,'c
 dcCore::app()->tpl->addBlock('ComListeCommentsEntries', [tplComListe::class,'comListeCommentsEntries']);
 dcCore::app()->tpl->addValue('ComListePaginationLinks', [tplComListe::class,'comListePaginationLinks']);
 dcCore::app()->tpl->addValue('ComListeOpenPostTitle', [tplComListe::class,'comListeOpenPostTitle']);
+dcCore::app()->tpl->addValue('ComListeCommentOrderNumber', [tplComListe::class,'comListeCommentOrderNumber']);
 
 dcCore::app()->tpl->addBlock('ComListePagination', [tplComListe::class,'comListePagination']);
 dcCore::app()->tpl->addValue('ComListePaginationCounter', [tplComListe::class,'comListePaginationCounter']);
@@ -234,6 +235,16 @@ class tplComListe
     public static function comListeOpenPostTitle($attr)
     {
         return __('open post');
+    }
+
+    public static function comListeCommentOrderNumber(ArrayObject $attr): string
+    {
+        return
+            '<?php echo ' .
+            'dcCore::app()->ctx->comments->index() + 1 +' .
+            '(dcCore::app()->public->getPageNumber() - 1) * ' .
+            'abs((integer) dcCore::app()->blog->settings->get("' . basename(__DIR__) . '")->get("nb_comments_per_page"));' .
+            '?>';
     }
 
     public static function comListePagination(ArrayObject $attr, string $content): string
