@@ -1,14 +1,14 @@
-todo
-- fix template pagination
-
-0.5-dev - 2023.01.xx
+0.5 - 2023.01.05
 * update to dotclear 2.24
-* use anonymous functions (WIP)
+* use anonymous functions
 * use abstract plugin id
 * use short settings id
+* use ::class for callables
+* use index from all comments for comment number
 * add item to plugin simple menu
 * add install process
 * add template dotty
+* add dotclear style pagination
 * remove template currywurst
 
 comListe 0.4.2 - 11-11-2017 - Pierre Van Glabeke

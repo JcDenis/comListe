@@ -18,7 +18,7 @@ $this->registerModule(
     'Comments list',
     'Display a list of all comments and trackbacks of a blog in a public page',
     'Benoit de Marne, Pierre Van Glabeke and contributors',
-    '0.5-dev',
+    '0.5',
     [
         'requires'    => [['core', '2.24']],
         'permissions' => dcCore::app()->auth->makePermissions([
