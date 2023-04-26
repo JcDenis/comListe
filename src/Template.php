@@ -263,14 +263,14 @@ class Template
 
     public static function comListePaginationCounter(ArrayObject $attr): string
     {
-        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'context::PaginationNbPages()') . '; ?>';
+        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->ctx::PaginationNbPages()') . '; ?>';
     }
 
     public static function comListePaginationCurrent(ArrayObject $attr): string
     {
         $offset = isset($attr['offset']) ? (int) $attr['offset'] : 0;
 
-        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'context::PaginationPosition(' . $offset . ')') . '; ?>';
+        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->ctx::PaginationPosition(' . $offset . ')') . '; ?>';
     }
 
     public static function comListePaginationIf(ArrayObject $attr, string $content): string
@@ -279,12 +279,12 @@ class Template
 
         if (isset($attr['start'])) {
             $sign = (bool) $attr['start'] ? '' : '!';
-            $if[] = $sign . 'context::PaginationStart()';
+            $if[] = $sign . 'dcCore::app()->ctx::PaginationStart()';
         }
 
         if (isset($attr['end'])) {
             $sign = (bool) $attr['end'] ? '' : '!';
-            $if[] = $sign . 'context::PaginationEnd()';
+            $if[] = $sign . 'dcCore::app()->ctx::PaginationEnd()';
         }
 
         if (count($if)) {
@@ -301,6 +301,6 @@ class Template
             $offset = (int) $attr['offset'];
         }
 
-        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'context::PaginationURL(' . $offset . ')') . '; ?>';
+        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->ctx::PaginationURL(' . $offset . ')') . '; ?>';
     }
 }
