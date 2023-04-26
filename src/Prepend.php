@@ -10,45 +10,35 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return null;
-}
+declare(strict_types=1);
 
-dcCore::app()->url->register(
-    'comListe',
-    'comListe',
-    '^comListe(?:/(.+))?$',
-    [urlcomListe::class,'comListe']
-);
+namespace Dotclear\Plugin\comListe;
 
-class urlcomListe extends dcUrlHandlers
+use dcCore;
+use dcNsProcess;
+
+class Prepend extends dcNsProcess
 {
-    public static function comListe($args)
+    public static function init(): bool
     {
-        $args = (string) $args;
+        static::$init = My::phpCompliant();
 
-        if (!dcCore::app()->blog->settings->get(basename(__DIR__))->get('enable')) {
-            self::p404();
+        return static::$init;
+    }
 
-            return null;
+    public static function process(): bool
+    {
+        if (!static::$init) {
+            return false;
         }
 
-        $n = self::getPageNumber($args);
-        if (!$n) {
-            $n = 1;
-        }
+        dcCore::app()->url->register(
+            'comListe',
+            'comListe',
+            '^comListe(?:/(.+))?$',
+            [UrlHandler::class, 'comListe']
+        );
 
-        dcCore::app()->public->setPageNumber($n);
-        dcCore::app()->ctx->__set('nb_comment_per_page', (int) dcCore::app()->blog->settings->get(basename(__DIR__))->get('nb_comments_per_page'));
-
-        $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->get('system')->get('theme'), 'tplset');
-        if (!empty($tplset) && is_dir(implode(DIRECTORY_SEPARATOR, [__DIR__, 'default-templates', $tplset]))) {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), implode(DIRECTORY_SEPARATOR, [__DIR__, 'default-templates', $tplset]));
-        } else {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), implode(DIRECTORY_SEPARATOR, [__DIR__, 'default-templates', DC_DEFAULT_TPLSET]));
-        }
-
-        self::serveDocument('comListe.html');
-        exit;
+        return true;
     }
 }

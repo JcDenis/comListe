@@ -10,28 +10,31 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return null;
-}
+declare(strict_types=1);
 
-dcCore::app()->addBehavior('initWidgets', [comListeWidget::class,'initWidget']);
+namespace Dotclear\Plugin\comListe;
 
-class comListeWidget
+use dcCore;
+use Dotclear\Helper\Html\Html;
+use Dotclear\Plugin\widgets\WidgetsStack;
+use Dotclear\Plugin\widgets\WidgetsElement;
+
+class Widgets
 {
-    public static function initWidget($w)
+    public static function initWidgets(WidgetsStack $w): void
     {
         $w->create(
-            'comListe',
-            __('Comments list'),
-            ['comListeWidget','publicWidget'],
+            My::id(),
+            My::name(),
+            [self::class, 'parseWidget'],
             null,
             __('Link to comments list public page')
         )
-        ->addTitle(__('Comments list'))
+        ->addTitle(My::name())
         ->setting(
             'link_title',
             __('Link title: (leave empty to use page title'),
-            __('Comments list')
+            My::name()
         )
         ->addHomeOnly()
         ->addContentOnly()
@@ -39,24 +42,25 @@ class comListeWidget
         ->addOffline();
     }
 
-    public static function publicWidget($w)
+    public static function parseWidget(WidgetsElement $w): string
     {
-        if ($w->offline
-         || !$w->checkHomeOnly(dcCore::app()->url->type)
-         || !dcCore::app()->blog->settings->get(basename(__DIR__))->get('enable')
+        if (is_null(dcCore::app()->blog)
+            || $w->__get('offline')
+            || !$w->checkHomeOnly(dcCore::app()->url->type)
+            || !dcCore::app()->blog->settings->get(My::id())->get('enable')
         ) {
-            return null;
+            return '';
         }
 
         return $w->renderDiv(
-            $w->content_only,
-            'comliste ' . $w->class,
+            (bool) $w->__get('content_only'),
+            My::id() . ' ' . $w->__get('class'),
             '',
-            ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '') .
+            ($w->__get('title') ? $w->renderTitle(Html::escapeHTML($w->__get('title'))) : '') .
             sprintf(
                 '<p><a href="%s">%s</a></p>',
                 dcCore::app()->blog->url . dcCore::app()->url->getBase('comListe'),
-                $w->link_title ? html::escapeHTML($w->link_title) : (dcCore::app()->blog->settings->get(basename(__DIR__))->get('page_title') ?? __('Comments list'))
+                $w->__get('link_title') ? Html::escapeHTML($w->__get('link_title')) : (dcCore::app()->blog->settings->get(My::id())->get('page_title') ?? My::name())
             )
         );
     }

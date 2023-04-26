@@ -10,40 +10,75 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return null;
-}
+declare(strict_types=1);
 
-require __DIR__ . '/_widgets.php';
+namespace Dotclear\Plugin\comListe;
 
-// Admin menu
-dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
-    __('Comments list'),
-    dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
-    urldecode(dcPage::getPF(basename(__DIR__) . '/icon.png')),
-    preg_match('/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__))) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
-    dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([dcAuth::PERMISSION_ADMIN]), dcCore::app()->blog->id)
-);
+use ArrayObject;
+use dcAdmin;
+use dcCore;
+use dcPage;
+use dcFavorites;
+use dcNsProcess;
 
-dcCore::app()->addBehaviors([
-    // Dashboard favorites
-    'adminDashboardFavoritesV2' => function (dcFavorites $favs) {
-        $favs->register(basename(__DIR__), [
-            'title'       => __('Comments list'),
-            'url'         => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
-            'small-icon'  => urldecode(dcPage::getPF(basename(__DIR__) . '/icon.png')),
-            'large-icon'  => urldecode(dcPage::getPF(basename(__DIR__) . '/icon-big.png')),
-            'permissions' => dcCore::app()->auth->makePermissions([dcAuth::PERMISSION_ADMIN]),
-        ]);
-    },
-    'adminSimpleMenuAddType'    => function (ArrayObject $items) {
-        $items[basename(__DIR__)] = new ArrayObject([__('Comments list'), false]);
-    },
-    'adminSimpleMenuBeforeEdit' => function ($type, $select, &$item) {
-        if (basename(__DIR__) == $type) {
-            $item[0] = __('Comments list');
-            $item[1] = dcCore::app()->blog->settings->get(basename(__DIR__))->get('page_title') ?? __('Comments list');
-            $item[2] = dcCore::app()->admin->__get('blog_url') . dcCore::app()->url->getURLFor(basename(__DIR__));
+class Backend extends dcNsProcess
+{
+    public static function init(): bool
+    {
+        static::$init = defined('DC_CONTEXT_ADMIN')
+            && My::phpCompliant();
+
+        return static::$init;
+    }
+
+    public static function process(): bool
+    {
+        if (!static::$init) {
+            return false;
         }
-    },
-]);
+
+        if (is_null(dcCore::app()->blog) || is_null(dcCore::app()->auth) || is_null(dcCore::app()->adminurl)) {
+            return false;
+        }
+
+        // Admin menu
+        dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
+            My::name(),
+            dcCore::app()->adminurl->get('admin.plugin.' . My::id()),
+            dcPage::getPF(My::id() . '/icon.png'),
+            preg_match('/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . My::id())) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
+            dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([dcCore::app()->auth::PERMISSION_ADMIN]), dcCore::app()->blog->id)
+        );
+
+        dcCore::app()->addBehaviors([
+            // Dashboard favorites
+            'adminDashboardFavoritesV2' => function (dcFavorites $favs): void {
+                if (is_null(dcCore::app()->auth) || is_null(dcCore::app()->adminurl)) {
+                    return;
+                }
+                $favs->register(My::id(), [
+                    'title'       => My::name(),
+                    'url'         => dcCore::app()->adminurl->get('admin.plugin.' . My::id()),
+                    'small-icon'  => dcPage::getPF(My::id() . '/icon.png'),
+                    'large-icon'  => dcPage::getPF(My::id() . '/icon-big.png'),
+                    'permissions' => dcCore::app()->auth->makePermissions([dcCore::app()->auth::PERMISSION_ADMIN]),
+                ]);
+            },
+            'adminSimpleMenuAddType' => function (ArrayObject $items): void {
+                $items[My::id()] = new ArrayObject([My::name(), false]);
+            },
+            'adminSimpleMenuBeforeEdit' => function (string $type, string $select, array &$item): void {
+                if (is_null(dcCore::app()->blog)) {
+                    return;
+                }
+                if (My::id() == $type) {
+                    $item[0] = My::name();
+                    $item[1] = dcCore::app()->blog->settings->get(My::id())->get('page_title') ?? My::name();
+                    $item[2] = dcCore::app()->admin->__get('blog_url') . dcCore::app()->url->getURLFor(My::id());
+                }
+            },
+        ]);
+
+        return true;
+    }
+}

@@ -54,14 +54,14 @@
     <nav class="pagination" aria-label="{{tpl:lang Pagination}}" role="navigation">
       <tpl:Block name="_pagination-content-prev">
         <tpl:ComListePaginationIf end="0">
-          <a href="{{tpl:ComListePaginationURL offset="+1"}}" class="prev"><span aria-hidden="true">&#171; </span>{{tpl:lang previous entries}}</a> -
+          <a href="{{tpl:ComListePaginationURL offset="+1"}}" class="prev"><span aria-hidden="true">&#171; </span>{{tpl:lang previous entries}}</a> 
         </tpl:ComListePaginationIf>
       </tpl:Block>
       <tpl:Block name="_pagination-content-current">
         <span class="visually-hidden">{{tpl:lang Active page}}</span>{{tpl:lang page}} {{tpl:ComListePaginationCurrent}} {{tpl:lang of}} {{tpl:ComListePaginationCounter}}
       </tpl:Block>
       <tpl:Block name="_pagination-content-next">
-        <tpl:ComListePaginationIf start="0"> - <a href="{{tpl:ComListePaginationURL offset="-1"}}" class="next">
+        <tpl:ComListePaginationIf start="0">  <a href="{{tpl:ComListePaginationURL offset="-1"}}" class="next">
           {{tpl:lang next entries}}<span aria-hidden="true"> &#187;</span></a>
         </tpl:ComListePaginationIf>
       </tpl:Block>
