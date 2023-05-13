@@ -1,3 +1,8 @@
+0.7 - 2023.05.13
+* require dotclear 2.26
+* add plugin Uninstaller features
+* release for dotclear 2.26 stable
+
 0.6 - 2023.04.26
 * require dotclear 2.26
 * use namespace
