@@ -1,11 +1,11 @@
 # README
 
-[![Release](https://img.shields.io/github/v/release/JcDenis/comListe)](https://github.com/JcDenis/comListe/releases)
-[![Date](https://img.shields.io/github/release-date/JcDenis/comListe)](https://github.com/JcDenis/comListe/releases)
-[![Issues](https://img.shields.io/github/issues/JcDenis/comListe)](https://github.com/JcDenis/comListe/issues)
+[![Release](https://img.shields.io/github/v/release/JcDenis/comListe)](https://git.dotclear.watch/JcDenis/comListe/releases)
+[![Date](https://img.shields.io/github/release-date/JcDenis/comListe)](https://git.dotclear.watch/JcDenis/comListe/releases)
+[![Issues](https://img.shields.io/github/issues/JcDenis/comListe)](https://git.dotclear.watch/JcDenis/comListe/issues)
 [![Dotclear](https://img.shields.io/badge/dotclear-v2.26-blue.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-green.svg)](https://plugins.dotaddict.org/dc2/details/comListe)
-[![License](https://img.shields.io/github/license/JcDenis/comListe)](https://github.com/JcDenis/comListe/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/JcDenis/comListe)](https://git.dotclear.watch/JcDenis/comListe/blob/master/LICENSE)
 
 ## WHAT IS COMLISTE ?
 
@@ -18,8 +18,8 @@ It adds public page of all comments and trackbacks.
 
  _comListe_ requires: 
 
-  * admin perms for configuration
-  * Dotclear 2.26
+ * admin perms for configuration
+ * Dotclear 2.27
 
 ## USAGE
 
@@ -37,8 +37,8 @@ to your theme tpl path and adapt them.
 ## LINKS
 
  * License : [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)
- * Source & contribution : [GitHub Page](https://github.com/JcDenis/comListe)
- * Packages & details:  [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/comListe)
+ * Source & contribution : [Gitea Page](https://git.dotclear.watch/JcDenis/comListe) or [GitHub Page](https://github.com/JcDenis/comListe)
+ * Packages & details: [Gitea Page](https://git.dotclear.watch/JcDenis/comListe/releases) or [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/comListe)
  * Discuss and help : [Dotclear Forum](https://forum.dotclear.org/viewtopic.php?id=333985)
 
 ## CONTRIBUTORS
