@@ -15,22 +15,19 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\comListe;
 
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Process;
 use Exception;
 
-class Install extends dcNsProcess
+class Install extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN')
-            && dcCore::app()->newVersion(My::id(), dcCore::app()->plugins->moduleInfo(My::id(), 'version'));
-
-        return static::$init;
+        return self::status(My::checkContext(My::INSTALL));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
@@ -39,7 +36,7 @@ class Install extends dcNsProcess
         }
 
         try {
-            $s = dcCore::app()->blog->settings->get(My::id());
+            $s = My::settings();
             $s->put('enable', false, 'boolean', 'Enable comListe', false, true);
             $s->put('page_title', 'Comments list', 'string', 'Public page title', false, true);
             $s->put('nb_comments_per_page', 10, 'integer', 'Number of comments per page', false, true);

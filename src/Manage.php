@@ -15,8 +15,11 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\comListe;
 
 use dcCore;
-use dcNsProcess;
-use dcPage;
+use Dotclear\Core\Backend\{
+    Notices,
+    Page
+};
+use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Form\{
     Checkbox,
     Div,
@@ -33,26 +36,20 @@ use Dotclear\Helper\Html\Form\{
 use Dotclear\Helper\Html\Html;
 use Exception;
 
-class Manage extends dcNsProcess
+class Manage extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN')
-            && !is_null(dcCore::app()->auth) && !is_null(dcCore::app()->blog)
-            && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-                dcCore::app()->auth::PERMISSION_ADMIN,
-            ]), dcCore::app()->blog->id);
-
-        return static::$init;
+        return self::status(My::checkContext(My::MANAGE));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
-        if (is_null(dcCore::app()->blog) || is_null(dcCore::app()->adminurl)) {
+        if (is_null(dcCore::app()->blog)) {
             return false;
         }
 
@@ -64,21 +61,15 @@ class Manage extends dcNsProcess
             if (empty($_POST['comliste_page_title'])) {
                 throw new Exception(__('No page title.'));
             }
-            $s = dcCore::app()->blog->settings->get(My::id());
+            $s = My::settings();
             $s->put('enable', !empty($_POST['comliste_enable']));
             $s->put('page_title', $_POST['comliste_page_title']);
             $s->put('nb_comments_per_page', $_POST['comliste_nb_comments_per_page'] ?? 10);
             $s->put('comments_order', $_POST['comliste_comments_order'] == 'asc' ? 'asc' : 'desc');
 
             dcCore::app()->blog->triggerBlog();
-
-            dcPage::addSuccessNotice(
-                __('Configuration successfully updated.')
-            );
-
-            dcCore::app()->adminurl->redirect(
-                'admin.plugin.' . My::id()
-            );
+            Notices::addSuccessNotice(__('Configuration successfully updated.'));
+            My::redirect();
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
         }
@@ -88,25 +79,25 @@ class Manage extends dcNsProcess
 
     public static function render(): void
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return;
         }
 
-        if (is_null(dcCore::app()->blog) || is_null(dcCore::app()->adminurl)) {
+        if (is_null(dcCore::app()->blog)) {
             return;
         }
 
-        $s = dcCore::app()->blog->settings->get(My::id());
+        $s = My::settings();
 
-        dcPage::openModule(My::name());
+        Page::openModule(My::name());
 
-        echo dcPage::breadcrumb([
+        echo Page::breadcrumb([
             Html::escapeHTML(dcCore::app()->blog->name) => '',
             My::name()                                  => '',
         ]) .
-        dcPage::notices() .
+        Notices::getNotices() .
 
-        (new Form('setting_form'))->method('post')->action(dcCore::app()->adminurl->get('admin.plugin.' . My::id()))->separator('')->fields([
+        (new Form('setting_form'))->method('post')->action(My::manageUrl())->separator('')->fields([
             (new Div())->class('fieldset')->items([
                 (new Text('h4', __('Plugin activation'))),
                 (new Para())->items([
@@ -132,13 +123,12 @@ class Manage extends dcNsProcess
             (new Para())->class('clear')->items([
                 (new Submit(['do']))->value(__('Save')),
                 (new Hidden(['action'], 'saveconfig')),
-                (new Hidden(['p'], My::id())),
-                dcCOre::app()->formNonce(false),
+                ... My::hiddenFields(),
             ]),
         ])->render();
 
-        dcPage::helpBlock('comListe');
+        Page::helpBlock('comListe');
 
-        dcPage::closeModule();
+        Page::closeModule();
     }
 }

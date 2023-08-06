@@ -41,7 +41,7 @@ class Template
         if (is_null(dcCore::app()->blog) || is_null(dcCore::app()->ctx)) {
             return '10';
         }
-        dcCore::app()->ctx->__set('nb_comment_per_page', (int) dcCore::app()->blog->settings->get(My::id())->get('nb_comments_per_page'));
+        dcCore::app()->ctx->__set('nb_comment_per_page', (int) My::settings()->get('nb_comments_per_page'));
 
         return Html::escapeHTML((string) dcCore::app()->ctx->__get('nb_comment_per_page'));
     }
@@ -96,7 +96,7 @@ class Template
         }
 
         // Sens de tri issu des paramètres du plugin
-        $order = is_null(dcCore::app()->blog) ? 'desc' : dcCore::app()->blog->settings->get(My::id())->get('comments_order');
+        $order = is_null(dcCore::app()->blog) ? 'desc' : My::settings()->get('comments_order');
         if (isset($attr['order']) && preg_match('/^(desc|asc)$/i', $attr['order'])) {
             $order = $attr['order'];
         }

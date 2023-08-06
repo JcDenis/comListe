@@ -15,28 +15,22 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\comListe;
 
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Process;
 
-class Frontend extends dcNsProcess
+class Frontend extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_RC_PATH');
-
-        return static::$init;
+        return self::status(My::checkContext(My::FRONTEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
-        if (is_null(dcCore::app()->blog)) {
-            return false;
-        }
-
-        if (!dcCore::app()->blog->settings->get(My::id())->get('enable')) {
+        if (!My::settings()->get('enable')) {
             return false;
         }
 

@@ -47,7 +47,7 @@ class Widgets
         if (is_null(dcCore::app()->blog)
             || $w->__get('offline')
             || !$w->checkHomeOnly(dcCore::app()->url->type)
-            || !dcCore::app()->blog->settings->get(My::id())->get('enable')
+            || !My::settings()->get('enable')
         ) {
             return '';
         }
@@ -60,7 +60,7 @@ class Widgets
             sprintf(
                 '<p><a href="%s">%s</a></p>',
                 dcCore::app()->blog->url . dcCore::app()->url->getBase('comListe'),
-                $w->__get('link_title') ? Html::escapeHTML($w->__get('link_title')) : (dcCore::app()->blog->settings->get(My::id())->get('page_title') ?? My::name())
+                $w->__get('link_title') ? Html::escapeHTML($w->__get('link_title')) : (My::settings()->get('page_title') ?? My::name())
             )
         );
     }
