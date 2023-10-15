@@ -1,24 +1,22 @@
 <?php
-/**
- * @brief comListe, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Benoit de Marne, Pierre Van Glabeke and contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\comListe;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Plugin\widgets\WidgetsStack;
 use Dotclear\Plugin\widgets\WidgetsElement;
 
+/**
+ * @brief       comListe widgets class.
+ * @ingroup     comListe
+ *
+ * @author      Benoit de Marne (author)
+ * @author      Jean-Christian Denis (latest)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Widgets
 {
     public static function initWidgets(WidgetsStack $w): void
@@ -26,7 +24,7 @@ class Widgets
         $w->create(
             My::id(),
             My::name(),
-            [self::class, 'parseWidget'],
+            self::parseWidget(...),
             null,
             __('Link to comments list public page')
         )
@@ -44,9 +42,9 @@ class Widgets
 
     public static function parseWidget(WidgetsElement $w): string
     {
-        if (is_null(dcCore::app()->blog)
+        if (!App::blog()->isDefined()
             || $w->__get('offline')
-            || !$w->checkHomeOnly(dcCore::app()->url->type)
+            || !$w->checkHomeOnly(App::url()->type)
             || !My::settings()->get('enable')
         ) {
             return '';
@@ -59,7 +57,7 @@ class Widgets
             ($w->__get('title') ? $w->renderTitle(Html::escapeHTML($w->__get('title'))) : '') .
             sprintf(
                 '<p><a href="%s">%s</a></p>',
-                dcCore::app()->blog->url . dcCore::app()->url->getBase('comListe'),
+                App::blog()->url() . App::url()->getBase('comListe'),
                 $w->__get('link_title') ? Html::escapeHTML($w->__get('link_title')) : (My::settings()->get('page_title') ?? My::name())
             )
         );

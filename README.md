@@ -1,24 +1,22 @@
 # README
 
-[![Release](https://img.shields.io/badge/release-0.8-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/comListe/releases)
-[![Date](https://img.shields.io/badge/date-2023.08.06-c44d58.svg)](https://git.dotclear.watch/JcDenis/comListe/releases)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.26-137bbb.svg)](https://fr.dotclear.org/download)
+[![Release](https://img.shields.io/badge/release-0.9-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/comListe/releases)
+![Date](https://img.shields.io/badge/date-2023.10.15-c44d58.svg)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.28-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/comListe)
-[![License](https://img.shields.io/github/license/JcDenis/comListe)](https://git.dotclear.watch/JcDenis/comListe/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-GPL--2.0-ececec.svg)](https://git.dotclear.watch/JcDenis/comListe/src/branch/master/LICENSE)
 
-## WHAT IS COMLISTE ?
+## ABOUT
 
-_comListe_ is a plugin for the open-source 
-web publishing software called Dotclear.
+_comListe_ is a plugin for the open-source web publishing software called [Dotclear](https://www.dotclear.org).
 
-It adds public page of all comments and trackbacks.
+> Add public page of all comments and trackbacks.
 
 ## REQUIREMENTS
 
- _comListe_ requires: 
-
- * admin perms for configuration
- * Dotclear 2.27
+* Dotclear 2.28
+* PHP 8.1
+* Dotclear admin permissons for configuration
 
 ## USAGE
 
@@ -35,15 +33,15 @@ to your theme tpl path and adapt them.
 
 ## LINKS
 
- * License : [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)
- * Source & contribution : [Gitea Page](https://git.dotclear.watch/JcDenis/comListe) or [GitHub Page](https://github.com/JcDenis/comListe)
- * Packages & details: [Gitea Page](https://git.dotclear.watch/JcDenis/comListe/releases) or [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/comListe)
- * Discuss and help : [Dotclear Forum](https://forum.dotclear.org/viewtopic.php?id=333985)
+* [Packages & details](https://git.dotclear.watch/JcDenis/comListe/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/comListe))
+* [Sources & contributions](https://git.dotclear.watch/JcDenis/comListe) (or on [GitHub](https://github.com/JcDenis/comListe))
+* [Issues & security](https://git.dotclear.watch/JcDenis/comListe/issues) (or on [GitHub](https://github.com/JcDenis/comListe/issues))
+* [Discuss & help](https://forum.dotclear.org/viewtopic.php?id=333985)
 
 ## CONTRIBUTORS
 
- * Benoit de Marne (author)
- * Pierre Van Glabeke
- * Jean-Christian Denis
+* Benoit de Marne (author)
+* Pierre Van Glabeke
+* Jean-Christian Denis (latest)
 
- You are welcome to contribute to this code.
+You are welcome to contribute to this code.

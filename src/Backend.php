@@ -1,24 +1,22 @@
 <?php
-/**
- * @brief comListe, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Benoit de Marne, Pierre Van Glabeke and contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\comListe;
 
 use ArrayObject;
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Backend\Favorites;
 use Dotclear\Core\Process;
 
+/**
+ * @brief       comListe backend class.
+ * @ingroup     comListe
+ *
+ * @author      Benoit de Marne (author)
+ * @author      Jean-Christian Denis (latest)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Backend extends Process
 {
     public static function init(): bool
@@ -35,7 +33,7 @@ class Backend extends Process
         // Admin menu
         My::addBackendMenuItem();
 
-        dcCore::app()->addBehaviors([
+        App::behavior()->addBehaviors([
             // Dashboard favorites
             'adminDashboardFavoritesV2' => function (Favorites $favs): void {
                 $favs->register(My::id(), [
@@ -43,7 +41,7 @@ class Backend extends Process
                     'url'         => My::manageUrl(),
                     'small-icon'  => My::icons(),
                     'large-icon'  => My::icons(),
-                    'permissions' => dcCore::app()->auth->makePermissions([dcCore::app()->auth::PERMISSION_ADMIN]),
+                    'permissions' => App::auth()->makePermissions([App::auth()::PERMISSION_ADMIN]),
                 ]);
             },
             'adminSimpleMenuAddType' => function (ArrayObject $items): void {
@@ -53,7 +51,7 @@ class Backend extends Process
                 if (My::id() == $type) {
                     $item[0] = My::name();
                     $item[1] = My::settings()->get('page_title') ?? My::name();
-                    $item[2] = dcCore::app()->admin->__get('blog_url') . dcCore::app()->url->getURLFor(My::id());
+                    $item[2] = App::backend()->__get('blog_url') . App::url()->getURLFor(My::id());
                 }
             },
         ]);

@@ -1,23 +1,21 @@
 <?php
-/**
- * @brief comListe, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Benoit de Marne, Pierre Van Glabeke and contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\comListe;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Exception;
 
+/**
+ * @brief       comListe install class.
+ * @ingroup     comListe
+ *
+ * @author      Benoit de Marne (author)
+ * @author      Jean-Christian Denis (latest)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Install extends Process
 {
     public static function init(): bool
@@ -31,10 +29,6 @@ class Install extends Process
             return false;
         }
 
-        if (is_null(dcCore::app()->blog)) {
-            return false;
-        }
-
         try {
             $s = My::settings();
             $s->put('enable', false, 'boolean', 'Enable comListe', false, true);
@@ -44,7 +38,7 @@ class Install extends Process
 
             return true;
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
 
             return false;
         }

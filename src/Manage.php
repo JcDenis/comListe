@@ -1,20 +1,10 @@
 <?php
-/**
- * @brief comListe, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Benoit de Marne, Pierre Van Glabeke and contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\comListe;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Backend\{
     Notices,
     Page
@@ -36,6 +26,14 @@ use Dotclear\Helper\Html\Form\{
 use Dotclear\Helper\Html\Html;
 use Exception;
 
+/**
+ * @brief       comListe manage class.
+ * @ingroup     comListe
+ *
+ * @author      Benoit de Marne (author)
+ * @author      Jean-Christian Denis (latest)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Manage extends Process
 {
     public static function init(): bool
@@ -49,7 +47,7 @@ class Manage extends Process
             return false;
         }
 
-        if (is_null(dcCore::app()->blog)) {
+        if (!App::blog()->isDefined()) {
             return false;
         }
 
@@ -67,11 +65,11 @@ class Manage extends Process
             $s->put('nb_comments_per_page', $_POST['comliste_nb_comments_per_page'] ?? 10);
             $s->put('comments_order', $_POST['comliste_comments_order'] == 'asc' ? 'asc' : 'desc');
 
-            dcCore::app()->blog->triggerBlog();
+            App::blog()->triggerBlog();
             Notices::addSuccessNotice(__('Configuration successfully updated.'));
             My::redirect();
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
         }
 
         return true;
@@ -83,7 +81,7 @@ class Manage extends Process
             return;
         }
 
-        if (is_null(dcCore::app()->blog)) {
+        if (!App::blog()->isDefined()) {
             return;
         }
 
@@ -92,8 +90,8 @@ class Manage extends Process
         Page::openModule(My::name());
 
         echo Page::breadcrumb([
-            Html::escapeHTML(dcCore::app()->blog->name) => '',
-            My::name()                                  => '',
+            Html::escapeHTML(App::blog()->name()) => '',
+            My::name()                            => '',
         ]) .
         Notices::getNotices() .
 

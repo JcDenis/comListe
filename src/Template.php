@@ -1,23 +1,21 @@
 <?php
-/**
- * @brief comListe, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Benoit de Marne, Pierre Van Glabeke and contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\comListe;
 
 use ArrayObject;
-use dcCore;
+use Dotclear\App;
 use Dotclear\Helper\Html\Html;
 
+/**
+ * @brief       comListe frontend template class.
+ * @ingroup     comListe
+ *
+ * @author      Benoit de Marne (author)
+ * @author      Jean-Christian Denis (latest)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Template
 {
     public string $html_prev = '&#171;prev.';
@@ -26,36 +24,36 @@ class Template
     /* ComListeURL --------------------------------------- */
     public static function comListeURL(ArrayObject $attr): string
     {
-        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->blog->url.dcCore::app()->url->getBase("comListe")') . '; ?>';
+        return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::blog()->url.App::url()->getBase("comListe")') . '; ?>';
     }
 
     /* ComListePageTitle --------------------------------------- */
     public static function comListePageTitle(ArrayObject $attr): string
     {
-        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->blog->settings->get("' . My::id() . '")->get("page_title")') . '; ?>';
+        return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::blog()->settings()->get("' . My::id() . '")->get("page_title")') . '; ?>';
     }
 
     /* ComListeNbCommentsPerPage --------------------------------------- */
     public static function comListeNbCommentsPerPage(ArrayObject $attr): string
     {
-        if (is_null(dcCore::app()->blog) || is_null(dcCore::app()->ctx)) {
+        if (!App::blog()->isDefined()) {
             return '10';
         }
-        dcCore::app()->ctx->__set('nb_comment_per_page', (int) My::settings()->get('nb_comments_per_page'));
+        App::frontend()->context()->__set('nb_comment_per_page', (int) My::settings()->get('nb_comments_per_page'));
 
-        return Html::escapeHTML((string) dcCore::app()->ctx->__get('nb_comment_per_page'));
+        return Html::escapeHTML((string) App::frontend()->context()->__get('nb_comment_per_page'));
     }
 
     /* comListeNbComments --------------------------------------- */
     public static function comListeNbComments(ArrayObject$attr): string
     {
-        if (is_null(dcCore::app()->blog) || is_null(dcCore::app()->ctx)) {
+        if (!App::blog()->isDefined()) {
             return '0';
         }
-        if (!dcCore::app()->ctx->exists('pagination')) {
-            dcCore::app()->ctx->__set('pagination', dcCore::app()->blog->getComments([], true));
+        if (!App::frontend()->context()->exists('pagination')) {
+            App::frontend()->context()->__set('pagination', App::blog()->getComments([], true));
         }
-        $nb_comments = dcCore::app()->ctx->__get('pagination')->f(0);
+        $nb_comments = App::frontend()->context()->__get('pagination')->f(0);
 
         return Html::escapeHTML((string) $nb_comments);
     }
@@ -63,9 +61,9 @@ class Template
     /* ComListeCommentsEntries --------------------------------------- */
     public static function comListeCommentsEntries(ArrayObject $attr, string $content): string
     {
-        $p = 'if (dcCore::app()->ctx->posts !== null) { ' .
-            "\$params['post_id'] = dcCore::app()->ctx->posts->post_id; " .
-            "dcCore::app()->blog->withoutPassword(false);\n" .
+        $p = 'if (App::frontend()->context()->posts !== null) { ' .
+            "\$params['post_id'] = App::frontend()->context()->posts->post_id; " .
+            "App::blog()->withoutPassword(false);\n" .
         "}\n";
 
         if (empty($attr['with_pings'])) {
@@ -80,23 +78,23 @@ class Template
         if ($lastn > 0) {
             $p .= "\$params['limit'] = " . $lastn . ";\n";
         } else {
-            $p .= "if (dcCore::app()->ctx->nb_comment_per_page !== null) { \$params['limit'] = dcCore::app()->ctx->nb_comment_per_page; }\n";
+            $p .= "if (App::frontend()->context()->nb_comment_per_page !== null) { \$params['limit'] = App::frontend()->context()->nb_comment_per_page; }\n";
         }
 
-        $p .= "\$params['limit'] = array(((dcCore::app()->public->getPageNumber()-1)*\$params['limit']),\$params['limit']);\n";
+        $p .= "\$params['limit'] = array(((App::frontend()->getPageNumber()-1)*\$params['limit']),\$params['limit']);\n";
 
         if (empty($attr['no_context'])) {
-            $p .= 'if (dcCore::app()->ctx->exists("categories")) { ' .
-                "\$params['cat_id'] = dcCore::app()->ctx->categories->cat_id; " .
+            $p .= 'if (App::frontend()->context()->exists("categories")) { ' .
+                "\$params['cat_id'] = App::frontend()->context()->categories->cat_id; " .
             "}\n";
 
-            $p .= 'if (dcCore::app()->ctx->exists("langs")) { ' .
-                "\$params['sql'] = \"AND P.post_lang = '\".dcCore::app()->blog->con->escapeStr((string) dcCore::app()->langs->post_lang).\"' \"; " .
+            $p .= 'if (App::frontend()->context()->exists("langs")) { ' .
+                "\$params['sql'] = \"AND P.post_lang = '\".App::con()->escapeStr((string) App::frontend()->context()->langs->post_lang).\"' \"; " .
             "}\n";
         }
 
         // Sens de tri issu des paramètres du plugin
-        $order = is_null(dcCore::app()->blog) ? 'desc' : My::settings()->get('comments_order');
+        $order = !App::blog()->isDefined() ? 'desc' : My::settings()->get('comments_order');
         if (isset($attr['order']) && preg_match('/^(desc|asc)$/i', $attr['order'])) {
             $order = $attr['order'];
         }
@@ -109,17 +107,17 @@ class Template
 
         $res = "<?php\n";
         $res .= $p;
-        $res .= 'dcCore::app()->ctx->comments_params = $params; ';
-        $res .= 'dcCore::app()->ctx->comments = dcCore::app()->blog->getComments($params); unset($params);' . "\n";
-        $res .= "if (dcCore::app()->ctx->posts !== null) { dcCore::app()->blog->withoutPassword(true);}\n";
+        $res .= 'App::frontend()->context()->comments_params = $params; ';
+        $res .= 'App::frontend()->context()->comments = App::blog()->getComments($params); unset($params);' . "\n";
+        $res .= "if (App::frontend()->context()->posts !== null) { App::blog()->withoutPassword(true);}\n";
 
         if (!empty($attr['with_pings'])) {
-            $res .= 'dcCore::app()->ctx->pings = dcCore::app()->ctx->comments;' . "\n";
+            $res .= 'App::frontend()->context()->pings = App::frontend()->context()->comments;' . "\n";
         }
 
         $res .= "?>\n";
 
-        $res .= '<?php while (dcCore::app()->ctx->comments->fetch()) : ?>' . $content . '<?php endwhile; dcCore::app()->ctx->pop("comments"); ?>';
+        $res .= '<?php while (App::frontend()->context()->comments->fetch()) : ?>' . $content . '<?php endwhile; App::frontend()->context()->pop("comments"); ?>';
 
         return $res;
     }
@@ -131,10 +129,10 @@ class Template
         $p = '<?php
 
         function comListeMakePageLink($pageNumber, $linkText) {
-            if ($pageNumber != dcCore::app()->public->getPageNumber()) { 
+            if ($pageNumber != App::frontend()->getPageNumber()) { 
                 $args = $_SERVER["URL_REQUEST_PART"]; 
                 $args = preg_replace("#(^|/)page/([0-9]+)$#","",$args); 
-                $url = dcCore::app()->blog->url.$args; 
+                $url = App::blog()->url().$args; 
 
                 if ($pageNumber > 1) { 
                     $url = preg_replace("#/$#","",$url); 
@@ -152,20 +150,20 @@ class Template
             } 
         }
 
-        $current = dcCore::app()->public->getPageNumber();
+        $current = App::frontend()->getPageNumber();
         
         if(empty($params)) {
-            dcCore::app()->ctx->pagination = dcCore::app()->blog->getComments(null,true);
+            App::frontend()->context()->pagination = App::blog()->getComments(null,true);
         } else {
-            dcCore::app()->ctx->pagination = dcCore::app()->blog->getComments($params,true); 
+            App::frontend()->context()->pagination = App::blog()->getComments($params,true); 
             unset($params);
         }       
         
-        if (dcCore::app()->ctx->exists("pagination")) { 
-            $nb_comments = dcCore::app()->ctx->pagination->f(0); 
+        if (App::frontend()->context()->exists("pagination")) { 
+            $nb_comments = App::frontend()->context()->pagination->f(0); 
         } 
     
-        $nb_per_page = abs((integer) dcCore::app()->blog->settings->get("' . My::id() . '")->get("nb_comments_per_page"));
+        $nb_per_page = abs((integer) App::blog()->settings->get("' . My::id() . '")->get("nb_comments_per_page"));
         $nb_pages = ceil($nb_comments/$nb_per_page);
         $nb_max_pages = 10;
         $nb_sequence = 2*3+1;
@@ -222,17 +220,17 @@ class Template
     {
         return
             '<?php echo ' .
-            'dcCore::app()->ctx->comments->index() + 1 +' .
-            '(dcCore::app()->public->getPageNumber() - 1) * ' .
-            'abs((integer) dcCore::app()->blog->settings->get("' . My::id() . '")->get("nb_comments_per_page"));' .
+            'App::frontend()->context()->comments->index() + 1 +' .
+            '(App::frontend()->getPageNumber() - 1) * ' .
+            'abs((integer) App::blog()->settings()->get("' . My::id() . '")->get("nb_comments_per_page"));' .
             '?>';
     }
 
     public static function comListePagination(ArrayObject $attr, string $content): string
     {
         $params = "<?php\n" .
-            '$params = dcCore::app()->ctx->comments_params;' . "\n" .
-            dcCore::app()->callBehavior(
+            '$params = App::frontend()->context()->comments_params;' . "\n" .
+            App::behavior()->callBehavior(
                 'templatePrepareParams',
                 [
                     'tag'    => 'Pagination',
@@ -241,7 +239,7 @@ class Template
                 $attr,
                 $content
             ) .
-            'dcCore::app()->ctx->pagination = dcCore::app()->blog->getComments($params,true); unset($params);' . "\n" .
+            'App::frontend()->context()->pagination = App::blog()->getComments($params,true); unset($params);' . "\n" .
             "?>\n";
 
         if (isset($attr['no_context']) && $attr['no_context']) {
@@ -250,27 +248,27 @@ class Template
 
         return
             "<?php\n" .
-            '$bakcup_old_nbpp = dcCore::app()->ctx->nb_entry_per_page; ' . "\n" .
-            'dcCore::app()->ctx->nb_entry_per_page = abs((integer) dcCore::app()->blog->settings->get("' . My::id() . '")->get("nb_comments_per_page"));' . "\n" .
+            '$bakcup_old_nbpp = App::frontend()->context()->nb_entry_per_page; ' . "\n" .
+            'App::frontend()->context()->nb_entry_per_page = abs((integer) App::blog()->settings()->get("' . My::id() . '")->get("nb_comments_per_page"));' . "\n" .
             "?>\n" .
             $params .
-            '<?php if (dcCore::app()->ctx->pagination->f(0) > dcCore::app()->ctx->comments->count()) : ?>' .
+            '<?php if (App::frontend()->context()->pagination->f(0) > App::frontend()->context()->comments->count()) : ?>' .
             $content .
             "<?php endif;\n" .
-            'dcCore::app()->ctx->nb_entry_per_page = $bakcup_old_nbpp; ' . "\n" .
+            'App::frontend()->context()->nb_entry_per_page = $bakcup_old_nbpp; ' . "\n" .
             '?>';
     }
 
     public static function comListePaginationCounter(ArrayObject $attr): string
     {
-        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->ctx::PaginationNbPages()') . '; ?>';
+        return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::frontend()->context()::PaginationNbPages()') . '; ?>';
     }
 
     public static function comListePaginationCurrent(ArrayObject $attr): string
     {
         $offset = isset($attr['offset']) ? (int) $attr['offset'] : 0;
 
-        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->ctx::PaginationPosition(' . $offset . ')') . '; ?>';
+        return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::frontend()->context()::PaginationPosition(' . $offset . ')') . '; ?>';
     }
 
     public static function comListePaginationIf(ArrayObject $attr, string $content): string
@@ -279,12 +277,12 @@ class Template
 
         if (isset($attr['start'])) {
             $sign = (bool) $attr['start'] ? '' : '!';
-            $if[] = $sign . 'dcCore::app()->ctx::PaginationStart()';
+            $if[] = $sign . 'App::frontend()->context()::PaginationStart()';
         }
 
         if (isset($attr['end'])) {
             $sign = (bool) $attr['end'] ? '' : '!';
-            $if[] = $sign . 'dcCore::app()->ctx::PaginationEnd()';
+            $if[] = $sign . 'App::frontend()->context()::PaginationEnd()';
         }
 
         if (count($if)) {
@@ -301,6 +299,6 @@ class Template
             $offset = (int) $attr['offset'];
         }
 
-        return '<?php echo ' . sprintf(dcCore::app()->tpl->getFilters($attr), 'dcCore::app()->ctx::PaginationURL(' . $offset . ')') . '; ?>';
+        return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::frontend()->context()::PaginationURL(' . $offset . ')') . '; ?>';
     }
 }
