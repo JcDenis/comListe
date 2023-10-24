@@ -30,11 +30,6 @@ class Uninstall extends Process
 
         Uninstaller::instance()
             ->addUserAction(
-                'settings',
-                'delete_all',
-                My::id()
-            )
-            ->addUserAction(
                 'plugins',
                 'delete',
                 My::id()
@@ -42,11 +37,6 @@ class Uninstall extends Process
             ->addUserAction(
                 'versions',
                 'delete',
-                My::id()
-            )
-            ->addDirectAction(
-                'settings',
-                'delete_all',
                 My::id()
             )
             ->addDirectAction(

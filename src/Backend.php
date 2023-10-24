@@ -8,6 +8,7 @@ use ArrayObject;
 use Dotclear\App;
 use Dotclear\Core\Backend\Favorites;
 use Dotclear\Core\Process;
+use Dotclear\Helper\Html\Html;
 
 /**
  * @brief       comListe backend class.
@@ -51,9 +52,10 @@ class Backend extends Process
                 if (My::id() == $type) {
                     $item[0] = My::name();
                     $item[1] = My::settings()->get('page_title') ?? My::name();
-                    $item[2] = App::backend()->__get('blog_url') . App::url()->getURLFor(My::id());
+                    $item[2] = Html::stripHostURL(App::blog()->url()) . App::url()->getURLFor(My::id());
                 }
             },
+            'initWidgets' => Widgets::initWidgets(...),
         ]);
 
         return true;

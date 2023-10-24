@@ -24,39 +24,31 @@ class Frontend extends Process
 
     public static function process(): bool
     {
-        if (!self::status()) {
+        if (!self::status() || !My::settings()->get('enable')) {
             return false;
         }
 
-        if (!My::settings()->get('enable')) {
-            return false;
-        }
+        $tpl = App::frontend()->template();
 
-        App::frontend()->template()->addValue('ComListeURL', Template::comListeURL(...));
-        App::frontend()->template()->addValue('ComListePageTitle', Template::comListePageTitle(...));
-        App::frontend()->template()->addValue('ComListeNbComments', Template::comListeNbComments(...));
-        App::frontend()->template()->addValue('ComListeNbCommentsPerPage', Template::comListeNbCommentsPerPage(...));
-        App::frontend()->template()->addBlock('ComListeCommentsEntries', Template::comListeCommentsEntries(...));
-        App::frontend()->template()->addValue('ComListePaginationLinks', Template::comListePaginationLinks(...));
-        App::frontend()->template()->addValue('ComListeOpenPostTitle', Template::comListeOpenPostTitle(...));
-        App::frontend()->template()->addValue('ComListeCommentOrderNumber', Template::comListeCommentOrderNumber(...));
+        $tpl->addValue('ComListeURL', FrontendTemplate::comListeURL(...));
+        $tpl->addValue('ComListePageTitle', FrontendTemplate::comListePageTitle(...));
+        $tpl->addValue('ComListeNbComments', FrontendTemplate::comListeNbComments(...));
+        $tpl->addValue('ComListeNbCommentsPerPage', FrontendTemplate::comListeNbCommentsPerPage(...));
+        $tpl->addBlock('ComListeCommentsEntries', FrontendTemplate::comListeCommentsEntries(...));
+        $tpl->addValue('ComListePaginationLinks', FrontendTemplate::comListePaginationLinks(...));
+        $tpl->addValue('ComListeOpenPostTitle', FrontendTemplate::comListeOpenPostTitle(...));
+        $tpl->addValue('ComListeCommentOrderNumber', FrontendTemplate::comListeCommentOrderNumber(...));
 
-        App::frontend()->template()->addBlock('ComListePagination', Template::comListePagination(...));
-        App::frontend()->template()->addValue('ComListePaginationCounter', Template::comListePaginationCounter(...));
-        App::frontend()->template()->addValue('ComListePaginationCurrent', Template::comListePaginationCurrent(...));
-        App::frontend()->template()->addBlock('ComListePaginationIf', Template::comListePaginationIf(...));
-        App::frontend()->template()->addValue('ComListePaginationURL', Template::comListePaginationURL(...));
+        $tpl->addBlock('ComListePagination', FrontendTemplate::comListePagination(...));
+        $tpl->addValue('ComListePaginationCounter', FrontendTemplate::comListePaginationCounter(...));
+        $tpl->addValue('ComListePaginationCurrent', FrontendTemplate::comListePaginationCurrent(...));
+        $tpl->addBlock('ComListePaginationIf', FrontendTemplate::comListePaginationIf(...));
+        $tpl->addValue('ComListePaginationURL', FrontendTemplate::comListePaginationURL(...));
 
-        App::behavior()->addBehavior(
-            'publicBreadcrumb',
-            function (string $context, string $separator): ?string {
-                if ($context == 'comListe') {
-                    return __('Comments list');
-                }
-
-                return null;
-            },
-        );
+        App::behavior()->addBehaviors([
+            'publicBreadcrumb' => fn (string $context, string $separator) => $context == 'comListe' ? __('Comments list') : null,
+            'initWidgets'      => Widgets::initWidgets(...),
+        ]);
 
         return true;
     }

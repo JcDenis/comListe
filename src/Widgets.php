@@ -42,8 +42,7 @@ class Widgets
 
     public static function parseWidget(WidgetsElement $w): string
     {
-        if (!App::blog()->isDefined()
-            || $w->__get('offline')
+        if ($w->get('offline')
             || !$w->checkHomeOnly(App::url()->type)
             || !My::settings()->get('enable')
         ) {
@@ -51,14 +50,14 @@ class Widgets
         }
 
         return $w->renderDiv(
-            (bool) $w->__get('content_only'),
-            My::id() . ' ' . $w->__get('class'),
+            (bool) $w->get('content_only'),
+            My::id() . ' ' . $w->get('class'),
             '',
-            ($w->__get('title') ? $w->renderTitle(Html::escapeHTML($w->__get('title'))) : '') .
+            ($w->get('title') ? $w->renderTitle(Html::escapeHTML($w->get('title'))) : '') .
             sprintf(
                 '<p><a href="%s">%s</a></p>',
                 App::blog()->url() . App::url()->getBase('comListe'),
-                $w->__get('link_title') ? Html::escapeHTML($w->__get('link_title')) : (My::settings()->get('page_title') ?? My::name())
+                $w->get('link_title') ? Html::escapeHTML($w->get('link_title')) : (My::settings()->get('page_title') ?? My::name())
             )
         );
     }

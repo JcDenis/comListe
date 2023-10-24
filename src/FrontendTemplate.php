@@ -16,24 +16,36 @@ use Dotclear\Helper\Html\Html;
  * @author      Jean-Christian Denis (latest)
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class Template
+class FrontendTemplate
 {
     public string $html_prev = '&#171;prev.';
     public string $html_next = 'next&#187;';
 
-    /* ComListeURL --------------------------------------- */
+    /**
+     * comListeURL.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListeURL(ArrayObject $attr): string
     {
         return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::blog()->url.App::url()->getBase("comListe")') . '; ?>';
     }
 
-    /* ComListePageTitle --------------------------------------- */
+    /**
+     * comListePageTitle.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListePageTitle(ArrayObject $attr): string
     {
         return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::blog()->settings()->get("' . My::id() . '")->get("page_title")') . '; ?>';
     }
 
-    /* ComListeNbCommentsPerPage --------------------------------------- */
+    /**
+     * comListeNbCommentsPerPage.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListeNbCommentsPerPage(ArrayObject $attr): string
     {
         if (!App::blog()->isDefined()) {
@@ -44,7 +56,11 @@ class Template
         return Html::escapeHTML((string) App::frontend()->context()->__get('nb_comment_per_page'));
     }
 
-    /* comListeNbComments --------------------------------------- */
+    /**
+     * comListeNbComments.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListeNbComments(ArrayObject$attr): string
     {
         if (!App::blog()->isDefined()) {
@@ -58,7 +74,11 @@ class Template
         return Html::escapeHTML((string) $nb_comments);
     }
 
-    /* ComListeCommentsEntries --------------------------------------- */
+    /**
+     * comListeCommentsEntries.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListeCommentsEntries(ArrayObject $attr, string $content): string
     {
         $p = 'if (App::frontend()->context()->posts !== null) { ' .
@@ -122,8 +142,13 @@ class Template
         return $res;
     }
 
-    /* ComListePaginationLinks --------------------------------------- */
-    /* Reprise et adaptation de la fonction PaginationLinks du plugin advancedPagination-1.9 */
+    /**
+     * comListePaginationLinks.
+     *
+     * Reprise et adaptation de la fonction PaginationLinks du plugin advancedPagination-1.9
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListePaginationLinks(ArrayObject $attr): string
     {
         $p = '<?php
@@ -210,12 +235,21 @@ class Template
         return $p;
     }
 
-    /* ComListeOpenPostTitle --------------------------------------- */
+    /**
+     * comListeOpenPostTitle.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListeOpenPostTitle(ArrayObject $attr): string
     {
         return __('open post');
     }
 
+    /**
+     * comListeCommentOrderNumber.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListeCommentOrderNumber(ArrayObject $attr): string
     {
         return
@@ -226,6 +260,11 @@ class Template
             '?>';
     }
 
+    /**
+     * comListePagination.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListePagination(ArrayObject $attr, string $content): string
     {
         $params = "<?php\n" .
@@ -259,11 +298,21 @@ class Template
             '?>';
     }
 
+    /**
+     * comListePaginationCounter.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListePaginationCounter(ArrayObject $attr): string
     {
         return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::frontend()->context()::PaginationNbPages()') . '; ?>';
     }
 
+    /**
+     * comListePaginationCurrent.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListePaginationCurrent(ArrayObject $attr): string
     {
         $offset = isset($attr['offset']) ? (int) $attr['offset'] : 0;
@@ -271,6 +320,11 @@ class Template
         return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::frontend()->context()::PaginationPosition(' . $offset . ')') . '; ?>';
     }
 
+    /**
+     * comListePaginationIf.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListePaginationIf(ArrayObject $attr, string $content): string
     {
         $if = [];
@@ -292,6 +346,11 @@ class Template
         return $content;
     }
 
+    /**
+     * comListePaginationURL.
+     *
+     * @param   ArrayObject<string, mixed>  $attr   The attributes
+     */
     public static function comListePaginationURL(ArrayObject $attr): string
     {
         $offset = 0;

@@ -29,10 +29,10 @@ class Prepend extends Process
         }
 
         App::url()->register(
-            'comListe',
+            My::id(),
             'comListe',
             '^comListe(?:/(.+))?$',
-            UrlHandler::comListe(...)
+            FrontendUrl::comListe(...)
         );
 
         return true;

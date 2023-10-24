@@ -15,15 +15,13 @@ use Dotclear\Core\Frontend\Url;
  * @author      Jean-Christian Denis (latest)
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class UrlHandler extends Url
+class FrontendUrl extends Url
 {
     public static function comListe(?string $args): void
     {
         $args = (string) $args;
 
-        if (!App::blog()->isDefined()
-            || !My::settings()->get('enable')
-        ) {
+        if (!My::settings()->get('enable')) {
             self::p404();
         }
 
@@ -31,11 +29,10 @@ class UrlHandler extends Url
         App::frontend()->context()->__set('nb_comment_per_page', (int) My::settings()->get('nb_comments_per_page'));
 
         $tplset = App::themes()->moduleInfo(App::blog()->settings()->get('system')->get('theme'), 'tplset');
-        if (!empty($tplset) && is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]))) {
-            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]));
-        } else {
-            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', App::config()->defaultTplset()]));
+        if (empty($tplset) || !is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]))) {
+            $tplset = App::config()->defaultTplset();
         }
+        App::frontend()->template()->appendPath(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]));
 
         self::serveDocument('comListe.html');
         exit;

@@ -107,7 +107,7 @@ class Manage extends Process
                 (new Text('h4', __('General options'))),
                 (new Para())->items([
                     (new Label(__('Public page title:'), Label::OUTSIDE_LABEL_BEFORE))->for('comliste_page_title'),
-                    (new Input('comliste_page_title'))->size(30)->maxlenght(255)->value((string) $s->get('page_title')),
+                    (new Input('comliste_page_title'))->size(30)->maxlength(255)->value((string) $s->get('page_title')),
                 ]),
                 (new Para())->items([
                     (new Label(__('Number of comments per page:'), Label::OUTSIDE_LABEL_BEFORE))->for('comliste_nb_comments_per_page'),
