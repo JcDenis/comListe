@@ -18,7 +18,7 @@ $this->registerModule(
     'Comments list',
     'Display a list of all comments and trackbacks of a blog in a public page',
     'Benoit de Marne, Pierre Van Glabeke and contributors',
-    '0.9.1',
+    '0.9.2',
     [
         'requires'    => [['core', '2.28']],
         'permissions' => 'My',

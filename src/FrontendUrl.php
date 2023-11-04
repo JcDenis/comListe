@@ -28,7 +28,7 @@ class FrontendUrl extends Url
         App::frontend()->setPageNumber(self::getPageNumber($args) ?: 1);
         App::frontend()->context()->__set('nb_comment_per_page', (int) My::settings()->get('nb_comments_per_page'));
 
-        $tplset = App::themes()->moduleInfo(App::blog()->settings()->get('system')->get('theme'), 'tplset');
+        $tplset = App::themes()->getDefine(App::blog()->settings()->get('system')->get('theme'))->get('tplset');
         if (empty($tplset) || !is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]))) {
             $tplset = App::config()->defaultTplset();
         }
