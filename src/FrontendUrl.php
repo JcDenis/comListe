@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\comListe;
 
 use Dotclear\App;
-use Dotclear\Core\Frontend\Url;
+use Dotclear\Core\Url;
 
 /**
  * @brief       comListe frontend URL class.
