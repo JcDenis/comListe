@@ -109,7 +109,7 @@ class FrontendTemplate
             "}\n";
 
             $p .= 'if (App::frontend()->context()->exists("langs")) { ' .
-                "\$params['sql'] = \"AND P.post_lang = '\".App::con()->escapeStr((string) App::frontend()->context()->langs->post_lang).\"' \"; " .
+                "\$params['sql'] = \"AND P.post_lang = '\".App::db()->con()->escapeStr((string) App::frontend()->context()->langs->post_lang).\"' \"; " .
             "}\n";
         }
 
