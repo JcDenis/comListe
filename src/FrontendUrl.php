@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\comListe;
 
 use Dotclear\App;
-use Dotclear\Core\Url;
 
 /**
  * @brief       comListe frontend URL class.
@@ -15,17 +14,17 @@ use Dotclear\Core\Url;
  * @author      Jean-Christian Denis (latest)
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class FrontendUrl extends Url
+class FrontendUrl
 {
     public static function comListe(?string $args): void
     {
         $args = (string) $args;
 
         if (!My::settings()->get('enable')) {
-            self::p404();
+            App::url()::p404();
         }
 
-        App::frontend()->setPageNumber(self::getPageNumber($args) ?: 1);
+        App::frontend()->setPageNumber(App::url()::getPageNumber($args) ?: 1);
         App::frontend()->context()->__set('nb_comment_per_page', (int) My::settings()->get('nb_comments_per_page'));
 
         $tplset = App::themes()->getDefine(App::blog()->settings()->get('system')->get('theme'))->get('tplset');
@@ -34,7 +33,7 @@ class FrontendUrl extends Url
         }
         App::frontend()->template()->appendPath(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]));
 
-        self::serveDocument('comListe.html');
+        App::url()::serveDocument('comListe.html');
         exit;
     }
 }
