@@ -1,0 +1,1 @@
+* move settings to blog pref
