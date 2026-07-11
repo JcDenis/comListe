@@ -69,7 +69,7 @@ class FrontendTemplate
         if (!App::frontend()->context()->exists('pagination')) {
             App::frontend()->context()->__set('pagination', App::blog()->getComments([], true));
         }
-        $nb_comments = App::frontend()->context()->__get('pagination')->f(0);
+        $nb_comments = App::frontend()->context()->__get('pagination')->cardinal();
 
         return Html::escapeHTML((string) $nb_comments);
     }
@@ -185,7 +185,7 @@ class FrontendTemplate
         }       
         
         if (App::frontend()->context()->exists("pagination")) { 
-            $nb_comments = App::frontend()->context()->pagination->f(0); 
+            $nb_comments = App::frontend()->context()->pagination->cardinal(); 
         } 
     
         $nb_per_page = abs((integer) App::blog()->settings->get("' . My::id() . '")->get("nb_comments_per_page"));
@@ -256,7 +256,7 @@ class FrontendTemplate
             '<?php echo ' .
             'App::frontend()->context()->comments->index() + 1 +' .
             '(App::frontend()->getPageNumber() - 1) * ' .
-            'abs((integer) App::blog()->settings()->get("' . My::id() . '")->get("nb_comments_per_page"));' .
+            'abs((int) App::blog()->settings()->get("' . My::id() . '")->get("nb_comments_per_page"));' .
             '?>';
     }
 
@@ -288,10 +288,10 @@ class FrontendTemplate
         return
             "<?php\n" .
             '$bakcup_old_nbpp = App::frontend()->context()->nb_entry_per_page; ' . "\n" .
-            'App::frontend()->context()->nb_entry_per_page = abs((integer) App::blog()->settings()->get("' . My::id() . '")->get("nb_comments_per_page"));' . "\n" .
+            'App::frontend()->context()->nb_entry_per_page = abs((int) App::blog()->settings()->get("' . My::id() . '")->get("nb_comments_per_page"));' . "\n" .
             "?>\n" .
             $params .
-            '<?php if (App::frontend()->context()->pagination->f(0) > App::frontend()->context()->comments->count()) : ?>' .
+            '<?php if (App::frontend()->context()->pagination->cardinal() > App::frontend()->context()->comments->count()) : ?>' .
             $content .
             "<?php endif;\n" .
             'App::frontend()->context()->nb_entry_per_page = $bakcup_old_nbpp; ' . "\n" .
