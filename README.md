@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/jcdenis/comListe?color=lightblue)](https://github.com/JcDenis/comListe/releases)
 ![Date](https://img.shields.io/github/release-date/jcdenis/comListe?color=red)
 [![Dotclear](https://img.shields.io/badge/dotclear-v2.36-137bbb.svg)](https://fr.dotclear.org/download)
-[![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/comListe)
+[![Repository](https://img.shields.io/badge/repository-official-9ac123.svg)](https://dotclear.org/plugin/detail/comListe)
 [![License](https://img.shields.io/github/license/jcdenis/comListe?color=white)](https://github.com/JcDenis/comListe/blob/master/LICENSE)
 
 ## ABOUT
@@ -14,14 +14,14 @@ _comListe_ is a plugin for the open-source web publishing software called [Dotcl
 
 ## REQUIREMENTS
 
-* Dotclear 2.36
+* Dotclear 2.39
 * PHP 8.1
 * Dotclear admin permissons for configuration
 
 ## USAGE
 
 First install _comListe_, manualy from a zip package or from 
-Dotaddict repository. (See Dotclear's documentation to know how do this)
+Dotclear plugins repository. (See Dotclear's documentation to know how do this)
 
 You can manage your _comListe_ from menu 
 ''Comments list'' on sidebar or you can add dashboard icon.
@@ -33,7 +33,7 @@ to your theme tpl path and adapt them.
 
 ## LINKS
 
-* [Packages & details](https://github.com/JcDenis/comListe/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/comListe))
+* [Packages & details](https://github.com/JcDenis/comListe/releases) (or on [Repository](https://dotclear.org/plugin/detail/comListe))
 * [Sources & contributions](https://github.com/JcDenis/comListe)
 * [Issues & security](https://github.com/JcDenis/comListe/issues)
 * [Discuss & help](https://forum.dotclear.org/viewtopic.php?id=48531)
