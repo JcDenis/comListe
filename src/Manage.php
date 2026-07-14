@@ -83,8 +83,6 @@ class Manage
             return;
         }
 
-        $s = My::settings();
-
         Page::openModule(My::name());
 
         echo Page::breadcrumb([
@@ -97,7 +95,7 @@ class Manage
             (new Div())->class('fieldset')->items([
                 (new Text('h4', __('Plugin activation'))),
                 (new Para())->items([
-                    (new Checkbox('comliste_enable', (bool) $s->get('enable')))->value(1),
+                    (new Checkbox('comliste_enable', My::settings()->getBool('enable', false)))->value(1),
                     (new Label(__('Enable comListe'), Label::OUTSIDE_LABEL_AFTER))->for('comliste_enable')->class('classic'),
                 ]),
             ]),
@@ -105,16 +103,16 @@ class Manage
                 (new Text('h4', __('General options'))),
                 (new Para())->items([
                     (new Label(__('Public page title:'), Label::OUTSIDE_LABEL_BEFORE))->for('comliste_page_title'),
-                    (new Input('comliste_page_title'))->size(30)->maxlength(255)->value((string) $s->get('page_title')),
+                    (new Input('comliste_page_title'))->size(30)->maxlength(255)->value(My::settings()->getStr('page_title', false)),
                 ]),
                 (new Para())->items([
                     (new Label(__('Number of comments per page:'), Label::OUTSIDE_LABEL_BEFORE))->for('comliste_nb_comments_per_page'),
-                    (new Number('comliste_nb_comments_per_page'))->min(0)->max(99)->value((int) $s->get('nb_comments_per_page')),
+                    (new Number('comliste_nb_comments_per_page'))->min(0)->max(99)->value((My::settings()->getInt('nb_comments_per_page', false))),
                 ]),
                 (new Label(__('Comments order:'), Label::OUTSIDE_LABEL_BEFORE))->for('comliste_comments_order'),
                 (new Select('comliste_comments_order'))
                     ->items([__('Ascending') => 'asc', __('Descending') => 'desc'])
-                    ->default($s->get('comments_order') == 'asc' ? 'asc' : 'desc'),
+                    ->default(My::settings()->getStr('comments_order', false) === 'asc' ? 'asc' : 'desc'),
             ]),
             (new Para())->class('clear')->items([
                 (new Submit(['do']))->value(__('Save')),

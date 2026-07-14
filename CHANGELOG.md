@@ -1,6 +1,7 @@
-comListe 1.1 - xxxx.xx.xx
+comListe 1.x - xxxx.xx.xx
 ===========================================================
 * Bump Dotclear from 2.36 to 2.39
+* Code review (phpstan max)
 
 comListe 1.0 - 2025.09.08
 ===========================================================

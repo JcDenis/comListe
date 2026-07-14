@@ -43,21 +43,23 @@ class Widgets
     public static function parseWidget(WidgetsElement $w): string
     {
         if ($w->get('offline')
-            || !$w->checkHomeOnly(App::url()->type)
-            || !My::settings()->get('enable')
+            || !$w->checkHomeOnly(App::url()->getType())
+            || !My::settings()->getBool('enable', false)
         ) {
             return '';
         }
 
+        $title = is_string($w->get('link_title')) && !empty($w->get('link_title')) ? $w->get('link_title') : My::settings()->getStr('page_title', false);
+
         return $w->renderDiv(
             (bool) $w->get('content_only'),
-            My::id() . ' ' . $w->get('class'),
+            My::id() . (is_string($w->get('class')) ? ' ' . $w->get('class') : ''),
             '',
-            ($w->get('title') ? $w->renderTitle(Html::escapeHTML($w->get('title'))) : '') .
+            (is_string($w->get('title')) && !empty($w->get('title')) ? $w->renderTitle(Html::escapeHTML($w->get('title'))) : '') .
             sprintf(
                 '<p><a href="%s">%s</a></p>',
                 App::blog()->url() . App::url()->getBase('comListe'),
-                $w->get('link_title') ? Html::escapeHTML($w->get('link_title')) : (My::settings()->get('page_title') ?? My::name())
+                empty($title) ? My::name() : $title
             )
         );
     }

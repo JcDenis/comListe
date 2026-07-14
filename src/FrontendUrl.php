@@ -20,15 +20,15 @@ class FrontendUrl
     {
         $args = (string) $args;
 
-        if (!My::settings()->get('enable')) {
+        if (!My::settings()->getBool('enable', false)) {
             App::url()::p404();
         }
 
         App::frontend()->setPageNumber(App::url()::getPageNumber($args) ?: 1);
-        App::frontend()->context()->__set('nb_comment_per_page', (int) My::settings()->get('nb_comments_per_page'));
+        App::frontend()->context()->__set('nb_comment_per_page', My::settings()->getInt('nb_comments_per_page', false));
 
-        $tplset = App::themes()->getDefine(App::blog()->settings()->get('system')->get('theme'))->get('tplset');
-        if (empty($tplset) || !is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]))) {
+        $tplset = App::themes()->getDefine(App::blog()->settings()->get('system')->getStr('theme', false))->get('tplset');
+        if (empty($tplset) || !is_string($tplset) || !is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]))) {
             $tplset = App::config()->defaultTplset();
         }
         App::frontend()->template()->appendPath(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]));

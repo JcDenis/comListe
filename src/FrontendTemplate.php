@@ -6,6 +6,7 @@ namespace Dotclear\Plugin\comListe;
 
 use ArrayObject;
 use Dotclear\App;
+use Dotclear\Database\MetaRecord;
 use Dotclear\Helper\Html\Html;
 
 /**
@@ -38,7 +39,7 @@ class FrontendTemplate
      */
     public static function comListePageTitle(ArrayObject $attr): string
     {
-        return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::blog()->settings()->get("' . My::id() . '")->get("page_title")') . '; ?>';
+        return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::blog()->settings()->get("' . My::id() . '")->getStr("page_title", false)') . '; ?>';
     }
 
     /**
@@ -51,9 +52,9 @@ class FrontendTemplate
         if (!App::blog()->isDefined()) {
             return '10';
         }
-        App::frontend()->context()->__set('nb_comment_per_page', (int) My::settings()->get('nb_comments_per_page'));
+        App::frontend()->context()->__set('nb_comment_per_page', My::settings()->getInt('nb_comments_per_page', false));
 
-        return Html::escapeHTML((string) App::frontend()->context()->__get('nb_comment_per_page'));
+        return Html::escapeHTML(My::settings()->getStr('nb_comments_per_page', false));
     }
 
     /**
@@ -69,7 +70,10 @@ class FrontendTemplate
         if (!App::frontend()->context()->exists('pagination')) {
             App::frontend()->context()->__set('pagination', App::blog()->getComments([], true));
         }
-        $nb_comments = App::frontend()->context()->__get('pagination')->cardinal();
+        $nb_comments = 0;
+        if (App::frontend()->context()->__get('pagination') instanceof MetaRecord) {
+            $nb_comments = App::frontend()->context()->__get('pagination')->cardinal();
+        }
 
         return Html::escapeHTML((string) $nb_comments);
     }
@@ -91,7 +95,7 @@ class FrontendTemplate
         }
 
         $lastn = 0;
-        if (isset($attr['lastn'])) {
+        if (isset($attr['lastn']) && is_numeric($attr['lastn'])) {
             $lastn = abs((int) $attr['lastn']) + 0;
         }
 
@@ -114,12 +118,12 @@ class FrontendTemplate
         }
 
         // Sens de tri issu des paramètres du plugin
-        $order = !App::blog()->isDefined() ? 'desc' : My::settings()->get('comments_order');
-        if (isset($attr['order']) && preg_match('/^(desc|asc)$/i', $attr['order'])) {
+        $order = !App::blog()->isDefined() ? 'desc' : My::settings()->getStr('comments_order', false);
+        if (isset($attr['order']) && is_string($attr['order']) && preg_match('/^(desc|asc)$/i', $attr['order'])) {
             $order = $attr['order'];
         }
 
-        $p .= "\$params['order'] = 'comment_dt " . ($order ?? 'desc') . "';\n";
+        $p .= "\$params['order'] = 'comment_dt " . ($order ?: 'desc') . "';\n";
 
         if (isset($attr['no_content']) && $attr['no_content']) {
             $p .= "\$params['no_content'] = true;\n";
@@ -188,7 +192,7 @@ class FrontendTemplate
             $nb_comments = App::frontend()->context()->pagination->cardinal(); 
         } 
     
-        $nb_per_page = abs((integer) App::blog()->settings->get("' . My::id() . '")->get("nb_comments_per_page"));
+        $nb_per_page = abs((int) App::blog()->settings->get("' . My::id() . '")->getInt("nb_comments_per_page", false));
         $nb_pages = ceil($nb_comments/$nb_per_page);
         $nb_max_pages = 10;
         $nb_sequence = 2*3+1;
@@ -256,7 +260,7 @@ class FrontendTemplate
             '<?php echo ' .
             'App::frontend()->context()->comments->index() + 1 +' .
             '(App::frontend()->getPageNumber() - 1) * ' .
-            'abs((int) App::blog()->settings()->get("' . My::id() . '")->get("nb_comments_per_page"));' .
+            'abs((int) App::blog()->settings()->get("' . My::id() . '")->getInt("nb_comments_per_page", false));' .
             '?>';
     }
 
@@ -288,7 +292,7 @@ class FrontendTemplate
         return
             "<?php\n" .
             '$bakcup_old_nbpp = App::frontend()->context()->nb_entry_per_page; ' . "\n" .
-            'App::frontend()->context()->nb_entry_per_page = abs((int) App::blog()->settings()->get("' . My::id() . '")->get("nb_comments_per_page"));' . "\n" .
+            'App::frontend()->context()->nb_entry_per_page = abs((int) App::blog()->settings()->get("' . My::id() . '")->getInt("nb_comments_per_page", false));' . "\n" .
             "?>\n" .
             $params .
             '<?php if (App::frontend()->context()->pagination->cardinal() > App::frontend()->context()->comments->count()) : ?>' .
@@ -315,7 +319,7 @@ class FrontendTemplate
      */
     public static function comListePaginationCurrent(ArrayObject $attr): string
     {
-        $offset = isset($attr['offset']) ? (int) $attr['offset'] : 0;
+        $offset = isset($attr['offset']) && is_numeric($attr['offset']) ? (int) $attr['offset'] : 0;
 
         return '<?php echo ' . sprintf(App::frontend()->template()->getFilters($attr), 'App::frontend()->context()::PaginationPosition(' . $offset . ')') . '; ?>';
     }
@@ -354,7 +358,7 @@ class FrontendTemplate
     public static function comListePaginationURL(ArrayObject $attr): string
     {
         $offset = 0;
-        if (isset($attr['offset'])) {
+        if (isset($attr['offset']) && is_numeric($attr['offset'])) {
             $offset = (int) $attr['offset'];
         }
 
