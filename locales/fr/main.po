@@ -49,3 +49,5 @@ msgstr "Ordre des commentaires :"
 msgid "Display a list of all comments and trackbacks of a blog in a public page"
 msgstr "Afficher la liste de tous les commentaires et rétroliens d'un blog dans une page publique"
 
+msgid "Link title: (leave empty to use page title)"
+msgstr "Titre du lien : (laisser vide pour utiliser le titre de la page)"

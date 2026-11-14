@@ -31,7 +31,7 @@ class Widgets
         ->addTitle(My::name())
         ->setting(
             'link_title',
-            __('Link title: (leave empty to use page title'),
+            __('Link title: (leave empty to use page title)'),
             My::name()
         )
         ->addHomeOnly()
