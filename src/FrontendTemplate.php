@@ -54,7 +54,7 @@ class FrontendTemplate
         }
         App::frontend()->context()->__set('nb_comment_per_page', My::settings()->getInt('nb_comments_per_page', false));
 
-        return Html::escapeHTML(My::settings()->getStr('nb_comments_per_page', false));
+        return Html::escapeHTML((string) My::settings()->getInt('nb_comments_per_page', false));
     }
 
     /**
