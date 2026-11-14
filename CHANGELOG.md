@@ -1,3 +1,11 @@
+comListe 1.2 - 2026.11.14
+===========================================================
+* [fix] Show trackbacks in public page templates and remove duplicate id
+* [fix] Number of comments per page on public page
+* [fix] Widget link title label and its translation
+* [docs] Add a user guide in French, with screenshots
+* [docs] Rewrite the admin help in English and French, with the widget and the menu
+
 comListe 1.1 - 2026.08.12
 ===========================================================
 * Bump Dotclear from 2.36 to 2.39
