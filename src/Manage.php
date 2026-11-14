@@ -121,7 +121,7 @@ class Manage
             ]),
         ])->render();
 
-        Page::helpBlock('comListe');
+        Page::helpBlock(My::id() . '-index');
 
         Page::closeModule();
     }
