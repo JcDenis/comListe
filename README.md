@@ -12,6 +12,8 @@ _comListe_ is a plugin for the open-source web publishing software called [Dotcl
 
 > Add public page of all comments and trackbacks.
 
+A [user guide in French](https://github.com/JcDenis/comListe/blob/master/docs/fr/utilisation.md) is available.
+
 ## REQUIREMENTS
 
 * Dotclear 2.39
@@ -33,6 +35,7 @@ to your theme tpl path and adapt them.
 
 ## LINKS
 
+* [User guide (in French)](https://github.com/JcDenis/comListe/blob/master/docs/fr/utilisation.md)
 * [Packages & details](https://github.com/JcDenis/comListe/releases) (or on [Repository](https://dotclear.org/plugin/detail/comListe))
 * [Sources & contributions](https://github.com/JcDenis/comListe)
 * [Issues & security](https://github.com/JcDenis/comListe/issues)
