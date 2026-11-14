@@ -27,9 +27,9 @@
 	
 	<div class="content-inner">
 	  <div id="comments">
-		<tpl:ComListeCommentsEntries>
+		<tpl:ComListeCommentsEntries with_pings="1">
 			<tpl:CommentsHeader>
-              <div class="feedback__comments" id="comments">
+              <div class="feedback__comments">
                 <ul class="comments-list">
 			</tpl:CommentsHeader>
                 <li id="c{{tpl:CommentID}}" class="comment {{tpl:CommentIfMe}} {{tpl:CommentIfOdd}} {{tpl:CommentIfFirst}}">
