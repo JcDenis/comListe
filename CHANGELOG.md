@@ -1,3 +1,7 @@
+comListe 1.3 - 2026.11.22
+===========================================================
+* [compat] Use adminSimpleMenuBeforeEditV2 behavior, require Dotclear 2.40
+
 comListe 1.2 - 2026.11.14
 ===========================================================
 * [fix] Show trackbacks in public page templates and remove duplicate id
