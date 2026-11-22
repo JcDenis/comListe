@@ -9,6 +9,7 @@ use Dotclear\App;
 use Dotclear\Core\Backend\Favorites;
 use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Helper\Html\Html;
+use Dotclear\Plugin\simpleMenu\MenuItemEdit;
 
 /**
  * @brief       comListe backend class.
@@ -50,11 +51,11 @@ class Backend
             'adminSimpleMenuAddType' => function (ArrayObject $items): void {
                 $items[My::id()] = new ArrayObject([My::name(), false]);
             },
-            'adminSimpleMenuBeforeEdit' => function (string $type, string $select, array &$item): void {
-                if (My::id() == $type) {
-                    $item[0] = My::name();
-                    $item[1] = My::settings()->get('page_title') ?? My::name();
-                    $item[2] = Html::stripHostURL(App::blog()->url()) . App::url()->getURLFor(My::id());
+            'adminSimpleMenuBeforeEditV2' => function (MenuItemEdit $item): void {
+                if (My::id() === $item->getType()) {
+                    $item->setLabel(My::name());
+                    $item->setDescription(My::settings()->getStr('page_title') ?? My::name());
+                    $item->setUrl(Html::stripHostURL(App::blog()->url()) . App::url()->getURLFor(My::id()));
                 }
             },
             'initWidgets' => Widgets::initWidgets(...),

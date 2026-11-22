@@ -16,7 +16,7 @@ A [user guide in French](https://github.com/JcDenis/comListe/blob/master/docs/fr
 
 ## REQUIREMENTS
 
-* Dotclear 2.39
+* Dotclear 2.40
 * PHP 8.1
 * Dotclear admin permissons for configuration
 

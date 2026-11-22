@@ -24,7 +24,7 @@ $this->registerModule(
     'Benoit de Marne, Pierre Van Glabeke and contributors',
     '1.2',
     [
-        'requires'    => [['core', '2.39']],
+        'requires'    => [['core', '2.40']],
         'permissions' => 'My',
         'type'        => 'plugin',
         'settings'    => ['self' => ''],
