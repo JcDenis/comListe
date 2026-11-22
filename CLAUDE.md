@@ -28,7 +28,7 @@ Required Dotclear and PHP versions: see `_define.php`.
 * `src/Uninstall.php`: cleaners for the plugin Uninstaller.
 * `src/Widgets.php`: widgets definition and rendering.
 * `default-templates/`: public templates.
-* Behaviors used: `adminDashboardFavoritesV2`, `adminSimpleMenuAddType`, `adminSimpleMenuBeforeEdit`, `initWidgets`, `publicBreadcrumb`.
+* Behaviors used: `adminDashboardFavoritesV2`, `adminSimpleMenuAddType`, `adminSimpleMenuBeforeEditV2`, `initWidgets`, `publicBreadcrumb`.
 
 ## Pitfalls
 
